@@ -1,18 +1,25 @@
 #include "ofApp.h"
+#include "../Boid.h"
+
+Boid* boid;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+	ofBackground(0, 255, 255);
+	boid = new Boid(750.0f, 100.0f, 0.0f,10.0f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	boid->Update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	//DrawsBoid
+	ofSetColor(0,0,0);
+	ofDrawCircle(boid->GetKinematic()->GetPosition(), boid->GetRadius());
+	ofDrawTriangle(boid->GetTriangle()->point1, boid->GetTriangle()->point2, boid->GetTriangle()->point3);
 }
 
 //--------------------------------------------------------------
