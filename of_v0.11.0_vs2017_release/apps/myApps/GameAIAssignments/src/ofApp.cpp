@@ -16,10 +16,21 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	//DrawsBoid
+
+	//Draws BreadCrumbs
+	for (Boid::Breadcrumb crumb : boid->GetCrumbs())
+	{
+		ofSetColor(255, 0, 0);
+		ofVec3f temp;
+		temp.set(crumb.pos.x, crumb.pos.y,0.0f);
+		ofDrawBox(temp,4);
+	}
+
+	//Draws Boid
 	ofSetColor(0,0,0);
 	ofDrawCircle(boid->GetKinematic()->GetPosition(), boid->GetRadius());
 	ofDrawTriangle(boid->GetTriangle()->point1, boid->GetTriangle()->point2, boid->GetTriangle()->point3);
+
 }
 
 //--------------------------------------------------------------
