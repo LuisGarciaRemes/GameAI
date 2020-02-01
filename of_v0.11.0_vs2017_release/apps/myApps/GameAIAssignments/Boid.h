@@ -24,20 +24,25 @@ public:
 	Kinematic* GetKinematic();
 	float GetRadius();
 	Boid::Triangle* GetTriangle();
-	void Update();
+	void Update(float dT);
 	void SetDropRate(float i_rate);
 	std::vector<Boid::Breadcrumb> GetCrumbs();
+
+	//basic-motion
+	void BasicMotion();
+	void SetOrientationBasedOnDirection();
 
 private:
 	Kinematic* m_kinematic;
 	float m_radius;
 	Boid::Triangle* m_triangle;
 	void UpdateTriangleVertices();
-	float m_prevOrientation;
 	float m_dropRate;
 	float m_dropTimer;
 	std::vector<Breadcrumb>  m_breadCrumbs;
-	void DropBreadCrumb();
+	void DropBreadCrumb(float dT);
+	void ClearBreadCrumbs();
 
+	int m_basicMoitionIndex = 0;
 };
 
