@@ -11,9 +11,11 @@ public:
 	void SetPosition(ofVec2f i_pos);
 	void SetVelocity(ofVec2f i_vel);
 	void SetLinear(ofVec2f i_linear);
+	void SetAngular(float i_angular);
 	void SetOrientation(float i_z);
 	float GetOrientation();
 	float GetRotation();
+	float GetAngular();
 	Kinematic(float i_x, float i_y, float i_orientation);
 	~Kinematic();
 

@@ -51,40 +51,92 @@ void MovementAlgorithms::BasicMotion(Kinematic* i_kinematic)
 	}
 
 	i_kinematic->SetVelocity(vel);
-	SetOrientationBasedOnDirection(i_kinematic);
 }
 
-void MovementAlgorithms::SetOrientationBasedOnDirection(Kinematic * i_kinematic)
+void MovementAlgorithms::SnapToDirectionOfTravel(Kinematic * i_kinematic)
 {
-	float ori;
-	float z;
+	i_kinematic->SetOrientation(atan2(i_kinematic->GetVelocity().y, i_kinematic->GetVelocity().x));
+}
 
-	z = pow(pow(i_kinematic->GetVelocity().x, 2) + pow(i_kinematic->GetVelocity().y, 2), .5);
+MovementAlgorithms::Steering* MovementAlgorithms::DynamicSeek(Kinematic * i_kinematic, ofVec2f target, float maxAccel)
+{
+	MovementAlgorithms::Steering* steering = new MovementAlgorithms::Steering();
 
-	if (i_kinematic->GetVelocity().x == 0)
+	steering->m_linear = target - i_kinematic->GetPosition();
+
+	steering->m_linear.normalize();
+	steering->m_linear *= maxAccel;
+
+	steering->m_angular = 0;
+
+	return steering;
+}
+
+MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kinematic * i_target, float i_targetRadius, float i_slowRadius, float i_maxAngular, float i_maxRot)
+{
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	float rotation = i_target->GetOrientation() - i_char->GetOrientation();
+
+	
+	if (rotation > PI)
 	{
-		ori = asin(i_kinematic->GetVelocity().y / (z));
+		rotation = PI;
+	}
+	else if(rotation < -PI)
+	{
+		rotation = -PI;
+	}
+
+	float rotationSize = abs(rotation);
+	float targetRotation;
+
+	if (rotationSize < i_targetRadius)
+	{
+		return nullptr;
+	}
+
+	if (rotationSize > i_slowRadius)
+	{
+		targetRotation = i_maxRot;
 	}
 	else
 	{
-		ori = acos(i_kinematic->GetVelocity().x / (z));
+		targetRotation = i_maxRot * rotationSize / i_slowRadius;
 	}
 
-	i_kinematic->SetOrientation(ori);
+	targetRotation *= rotation / rotationSize;
+
+	result->m_angular = targetRotation - i_char->GetRotation();
+	result->m_angular /= 0.1f;
+
+	float angularAcceleration = abs(result->m_angular);
+
+		if(angularAcceleration > i_maxAngular)
+		{
+			result->m_angular /= angularAcceleration;
+			result->m_angular *= i_maxAngular;
+		}
+		
+		result->m_linear = ofVec2f(0.0f,0.0f);
+
+	return result;
 }
 
-MovementAlgorithms::Steering MovementAlgorithms::DynamicSeek(Kinematic * i_kinematic, ofVec2f target, float maxAccel)
+MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic * i_char, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot)
 {
-	MovementAlgorithms::Steering steering;
+	Kinematic* i_target = new Kinematic(0.0f, 0.0f, 0.0f);
 
-	steering.m_linear = target - i_kinematic->GetPosition();
+	ofVec2f vel = i_char->GetVelocity();
 
-	steering.m_linear.normalize();
-	steering.m_linear * maxAccel;
+	if (vel.length() == 0)
+	{
+		return nullptr;
+	}
 
-	steering.m_angular = 0;
+	i_target->SetOrientation(atan2(vel.y,vel.x));
 
-	return steering;
+	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
 }
 
 

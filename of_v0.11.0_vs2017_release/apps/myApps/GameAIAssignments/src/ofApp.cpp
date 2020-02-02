@@ -22,10 +22,19 @@ void ofApp::update(){
 	{
 		case 0:
 			MovementAlgorithms::BasicMotion(boid->GetKinematic());
+			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
 			break;
 		case 1:
-			boid->GetKinematic()->SetLinear(boid->GetKinematic()->GetLinear() + MovementAlgorithms::DynamicSeek(boid->GetKinematic(),targetPos,5.0f).m_linear);
-			MovementAlgorithms::SetOrientationBasedOnDirection(boid->GetKinematic());
+			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boid->GetKinematic(),targetPos,5.0f)->m_linear);
+			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
+
+			/*
+			if (MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*4,.25f, PI))
+			{
+				boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*4, .25f, PI)->m_angular);
+			}
+			*/
+
 			break;
 		case 2:
 			break;
@@ -61,6 +70,8 @@ void ofApp::keyPressed(int key){
 	if (key == OF_KEY_LEFT || key == OF_KEY_RIGHT)
 	{
 		boid->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetAngular(0.0f);
 		boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 700.0f));
 		boid->ClearBreadCrumbs();
 		boid->GetKinematic()->m_basicMotionIndex = 0;

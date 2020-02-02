@@ -30,6 +30,11 @@ void Kinematic::SetLinear(ofVec2f i_linear)
 	m_linear = i_linear;
 }
 
+void Kinematic::SetAngular(float i_angular)
+{
+	m_angular = i_angular;
+}
+
 void Kinematic::SetOrientation(float i_z)
 {
 	m_orientation = i_z;
@@ -45,6 +50,11 @@ float Kinematic::GetRotation()
 	return m_rotation;
 }
 
+float Kinematic::GetAngular()
+{
+	return m_angular;
+}
+
 Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 {
 	m_position.set(i_x,i_y);
@@ -52,6 +62,8 @@ Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 	m_orientation = i_orientation;
 	m_rotation = 0.0f;
 	m_maxSpeed = 150.0f;
+	m_angular = 0.0f;
+	m_linear.set(0.0f, 0.0f);
 }
 
 Kinematic::~Kinematic()
@@ -61,14 +73,15 @@ Kinematic::~Kinematic()
 void Kinematic::UpdateKinematic(float dT)
 {
 
-	m_position += m_velocity * dT + m_linear * (.5f)*(pow(dT,2));
+	m_position += m_velocity * dT + m_linear * (0.5f)*(pow(dT,2));
+	m_orientation += m_rotation * dT + m_angular * (0.5f)*(pow(dT, 2));
+
 	m_velocity += m_linear * dT;
-	m_orientation += m_rotation * dT;
+	m_rotation += m_angular * dT;
 
 	if (m_velocity.length() > m_maxSpeed)
 	{
 		m_velocity.normalize();
 		m_velocity *= m_maxSpeed;
 	}
-
 }
