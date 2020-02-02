@@ -5,13 +5,14 @@
 
 Boid* boid;
 int simulationIndex = 0;
-ofVec2f targetPos;
+Kinematic* target;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);
 	boid = new Boid(50.0f, 700.0f, 0.0f,10.0f);
-	targetPos.set(50.0f, 700.0f);
+	target = new Kinematic();
+	target->SetPosition(ofVec2f(50.0f, 700.0f));
 }
 
 //--------------------------------------------------------------
@@ -25,16 +26,9 @@ void ofApp::update(){
 			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
 			break;
 		case 1:
-			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boid->GetKinematic(),targetPos,5.0f)->m_linear);
-			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
-
-			/*
-			if (MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*4,.25f, PI))
-			{
-				boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*4, .25f, PI)->m_angular);
-			}
-			*/
-
+			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);		
+			//MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
+			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132*4, 0.0698132*20, .25f, 2*PI)->m_angular);
 			break;
 		case 2:
 			break;
@@ -104,7 +98,8 @@ void ofApp::mousePressed(int x, int y, int button){
 
 	if (simulationIndex > 0)
 	{
-		targetPos.set(x, y);
+		target->SetPosition(ofVec2f(x, y));
+		boid->ClearBreadCrumbs();
 	}
 }
 

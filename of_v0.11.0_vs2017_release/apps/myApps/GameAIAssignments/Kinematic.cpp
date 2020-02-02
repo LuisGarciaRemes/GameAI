@@ -66,6 +66,17 @@ Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 	m_linear.set(0.0f, 0.0f);
 }
 
+Kinematic::Kinematic()
+{
+	m_position.set(0.0f, 0.0f);
+	m_velocity.set(0.0f, 0.0f);
+	m_orientation = 0.0f;
+	m_rotation = 0.0f;
+	m_maxSpeed = 150.0f;
+	m_angular = 0.0f;
+	m_linear.set(0.0f, 0.0f);
+}
+
 Kinematic::~Kinematic()
 {
 }

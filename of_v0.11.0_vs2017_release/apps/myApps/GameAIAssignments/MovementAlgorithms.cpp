@@ -58,13 +58,13 @@ void MovementAlgorithms::SnapToDirectionOfTravel(Kinematic * i_kinematic)
 	i_kinematic->SetOrientation(atan2(i_kinematic->GetVelocity().y, i_kinematic->GetVelocity().x));
 }
 
-MovementAlgorithms::Steering* MovementAlgorithms::DynamicSeek(Kinematic * i_kinematic, ofVec2f target, float maxAccel)
+MovementAlgorithms::Steering* MovementAlgorithms::DynamicSeek(Kinematic * i_char, Kinematic * i_target, float maxAccel)
 {
 	MovementAlgorithms::Steering* steering = new MovementAlgorithms::Steering();
 
-	steering->m_linear = target - i_kinematic->GetPosition();
+	steering->m_linear = i_target->GetPosition() - i_char->GetPosition();
 
-	steering->m_linear.normalize();
+	steering->m_linear = steering->m_linear.normalize();
 	steering->m_linear *= maxAccel;
 
 	steering->m_angular = 0;
@@ -91,14 +91,14 @@ MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kine
 	float rotationSize = abs(rotation);
 	float targetRotation;
 
-	if (rotationSize < i_targetRadius)
-	{
-		return nullptr;
-	}
-
+	
 	if (rotationSize > i_slowRadius)
 	{
 		targetRotation = i_maxRot;
+	}
+	else if (rotationSize < i_targetRadius)
+	{
+		targetRotation = 0.0f;
 	}
 	else
 	{
@@ -131,12 +131,45 @@ MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic
 
 	if (vel.length() == 0)
 	{
-		return nullptr;
+		return new MovementAlgorithms::Steering();
 	}
 
 	i_target->SetOrientation(atan2(vel.y,vel.x));
 
 	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
+}
+
+MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_char, Kinematic * i_target, float maxAccel, float i_targetRadius, float i_slowRadius)
+{
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	ofVec2f direction = i_target->GetPosition() - i_char->GetPosition();	float distance = direction.length();	float targetSpeed;	ofVec2f targetVel;	
+	if(distance > i_slowRadius)
+	{
+		targetSpeed = i_char->m_maxSpeed;
+	}
+	else if (distance < i_targetRadius)	{		targetSpeed = 0.0f;	}
+	else
+	{
+		targetSpeed = i_char->m_maxSpeed * (distance / i_slowRadius);
+	}
+
+	targetVel = direction;
+	targetVel = targetVel.normalize();
+	targetVel *= targetSpeed;
+
+	result->m_linear = targetVel - i_char->GetVelocity();
+	result->m_linear /= 0.1f;
+
+	if (result->m_linear.length() > maxAccel)
+	{
+		result->m_linear = result->m_linear.normalize();
+		result->m_linear *= maxAccel;
+	}
+
+	result->m_angular = 0.0f;
+
+	return result;
 }
 
 

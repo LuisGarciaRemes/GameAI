@@ -17,6 +17,7 @@ public:
 	float GetRotation();
 	float GetAngular();
 	Kinematic(float i_x, float i_y, float i_orientation);
+	Kinematic();
 	~Kinematic();
 
 	void UpdateKinematic(float dT);
@@ -24,11 +25,12 @@ public:
 	//basic-motion
 	int m_basicMotionIndex = 0;
 
+	float  m_maxSpeed;
+
 private:
 	float m_orientation;
 	ofVec2f m_position;
 	ofVec2f m_velocity;
-	float  m_maxSpeed;
 
 	float m_rotation;
 
