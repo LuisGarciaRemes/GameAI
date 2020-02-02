@@ -1,19 +1,40 @@
 #include "ofApp.h"
 #include "../Boid.h"
 #include "ofAppRunner.h"
+#include "../MovementAlgorithms.h"
 
 Boid* boid;
+int simulationIndex = 0;
+ofVec2f targetPos;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);
 	boid = new Boid(50.0f, 700.0f, 0.0f,10.0f);
+	targetPos.set(50.0f, 700.0f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	boid->Update(ofGetLastFrameTime());
-	boid->BasicMotion();
+
+	switch (simulationIndex)
+	{
+		case 0:
+			MovementAlgorithms::BasicMotion(boid->GetKinematic());
+			break;
+		case 1:
+			boid->GetKinematic()->SetLinear(boid->GetKinematic()->GetLinear() + MovementAlgorithms::DynamicSeek(boid->GetKinematic(),targetPos,5.0f).m_linear);
+			MovementAlgorithms::SetOrientationBasedOnDirection(boid->GetKinematic());
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		default:
+			simulationIndex = 0;
+			break;
+	}
 }
 
 //--------------------------------------------------------------
@@ -37,6 +58,19 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
+	if (key == OF_KEY_LEFT || key == OF_KEY_RIGHT)
+	{
+		boid->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 700.0f));
+		boid->ClearBreadCrumbs();
+		boid->GetKinematic()->m_basicMotionIndex = 0;
+
+		if (key == OF_KEY_RIGHT)
+		{
+			simulationIndex++;
+		}
+
+	}
 }
 
 //--------------------------------------------------------------
@@ -57,6 +91,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 
+	if (simulationIndex > 0)
+	{
+		targetPos.set(x, y);
+	}
 }
 
 //--------------------------------------------------------------

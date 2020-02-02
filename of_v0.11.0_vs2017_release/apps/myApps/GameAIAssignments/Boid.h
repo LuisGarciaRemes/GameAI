@@ -28,9 +28,7 @@ public:
 	void SetDropRate(float i_rate);
 	std::vector<Boid::Breadcrumb> GetCrumbs();
 
-	//basic-motion
-	void BasicMotion();
-	void SetOrientationBasedOnDirection();
+	void ClearBreadCrumbs();
 
 private:
 	Kinematic* m_kinematic;
@@ -41,8 +39,6 @@ private:
 	float m_dropTimer;
 	std::vector<Breadcrumb>  m_breadCrumbs;
 	void DropBreadCrumb(float dT);
-	void ClearBreadCrumbs();
 
-	int m_basicMoitionIndex = 0;
 };
 

@@ -182,12 +182,14 @@
   <ItemGroup>
     <ClCompile Include="Boid.cpp" />
     <ClCompile Include="Kinematic.cpp" />
+    <ClCompile Include="MovementAlgorithms.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boid.h" />
     <ClInclude Include="Kinematic.h" />
+    <ClInclude Include="MovementAlgorithms.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>

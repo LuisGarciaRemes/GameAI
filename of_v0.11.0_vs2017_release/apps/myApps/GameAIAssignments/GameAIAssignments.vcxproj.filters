@@ -11,6 +11,7 @@
     <ClCompile Include="Boid.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="MovementAlgorithms.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -28,6 +29,7 @@
     <ClInclude Include="Boid.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="MovementAlgorithms.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
