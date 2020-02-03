@@ -8,6 +8,7 @@ Boid* boid;
 int simulationIndex = 0;
 Kinematic* target;
 MovementAlgorithms::Steering* steering;
+float wanderOrientation = 0.0f;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -25,23 +26,23 @@ void ofApp::update(){
 	switch (simulationIndex)
 	{
 		case 0:
-			ofSetWindowTitle("Basic Motion");
+			ofSetWindowTitle("Basic Motion - Snapping To Direction Of Movement");
 			MovementAlgorithms::BasicMotion(boid->GetKinematic());
 			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
 			break;
 		case 1:
-			ofSetWindowTitle("Dynamic Seek");
+			ofSetWindowTitle("Dynamic Seek - Delegating To Look Where You Are Going");
 			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 10.0f)->m_linear);		
 			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 2:
-			ofSetWindowTitle("Dynamic Arrive");
+			ofSetWindowTitle("Dynamic Arrive - Delegating To Look Where You Are Going");
 			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);
 			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 3:
-			ofSetWindowTitle("Dynamic Wander");
-			steering = MovementAlgorithms::DynamicWander(boid->GetKinematic(), 0.0698132f, 10.0f, 500.0f, 10.0f, .25f, 10.0f);
+			ofSetWindowTitle("Dynamic Wander - Delegating To Face");
+			steering = MovementAlgorithms::DynamicWander(boid->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, .25f, 5.0f);
 			boid->GetKinematic()->SetLinear(steering->m_linear);
 			boid->GetKinematic()->SetAngular(steering->m_angular);
 			break;
@@ -81,16 +82,24 @@ void ofApp::keyPressed(int key){
 		boid->GetKinematic()->SetOrientation(0.0f);
 		boid->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
 		boid->GetKinematic()->SetAngular(0.0f);
-		boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 700.0f));
-		target->SetPosition(ofVec2f(50.0f, 700.0f));
-		boid->ClearBreadCrumbs();
 		boid->GetKinematic()->m_basicMotionIndex = 0;
+		target->SetPosition(ofVec2f(50.0f, 700.0f));
 
 		if (key == OF_KEY_RIGHT)
 		{
 			simulationIndex++;
 		}
 
+		if (simulationIndex == 3)
+		{
+			boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 350.0f));
+		}
+		else
+		{
+			boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 700.0f));
+		}
+
+		boid->ClearBreadCrumbs();
 	}
 }
 

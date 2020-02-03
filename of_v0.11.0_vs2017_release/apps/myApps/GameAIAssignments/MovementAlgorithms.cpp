@@ -80,13 +80,11 @@ MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kine
 
 	float rotation = i_target->GetOrientation() - i_char->GetOrientation();
 
-	
 	rotation = CLAMP(rotation,-PI,PI);
 
 	float rotationSize = abs(rotation);
 	float targetRotation;
 
-	
 	if (rotationSize > i_slowRadius)
 	{
 		targetRotation = i_maxRot;
@@ -142,12 +140,10 @@ MovementAlgorithms::Steering * MovementAlgorithms::Face(Kinematic * i_char, Kine
 
 	if (direction.length() == 0)
 	{
-		result->m_angular = i_target->GetAngular();
-		result->m_linear = i_target->GetLinear();
-		return  result;
+		return new MovementAlgorithms::Steering();
 	}
 
-	i_target->SetOrientation(atan2(-direction.x, direction.y));
+	i_target->SetOrientation(atan2(direction.y, direction.x));
 
 	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
 }
@@ -156,12 +152,20 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_c
 {
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
 
-	ofVec2f direction = i_target->GetPosition() - i_char->GetPosition();	float distance = direction.length();	float targetSpeed;	ofVec2f targetVel;	
+	ofVec2f direction = i_target->GetPosition() - i_char->GetPosition();
+	float distance = direction.length();
+	float targetSpeed;
+	ofVec2f targetVel;
+
+	
 	if(distance > i_slowRadius)
 	{
 		targetSpeed = i_char->m_maxSpeed;
 	}
-	else if (distance < i_targetRadius)	{		targetSpeed = 0.0f;	}
+	else if (distance < i_targetRadius)
+	{
+		targetSpeed = 0.0f;
+	}
 	else
 	{
 		targetSpeed = i_char->m_maxSpeed * (distance / i_slowRadius);
@@ -185,7 +189,7 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_c
 	return result;
 }
 
-MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_char, float wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular, float maxLinear)
+MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_char, float& wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular, float maxLinear)
 {
 
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
@@ -200,9 +204,12 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_c
 
 	i_target->SetPosition(i_target->GetPosition() + wanderRadius * (ofVec2f(cos(targetOrientation), sin(targetOrientation))));
 
-	result = MovementAlgorithms::Face(i_char, i_target, wanderRadius, wanderOffset,maxAngular, .25f);
+	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f,maxAngular, PI);
 
 	result->m_linear = maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
+
+	ofLog(OF_LOG_NOTICE) << "the linear is " << ofToString(result->m_linear);
+	ofLog(OF_LOG_NOTICE) << "the angular is " << ofToString(result->m_angular);
 
 	return result;
 }

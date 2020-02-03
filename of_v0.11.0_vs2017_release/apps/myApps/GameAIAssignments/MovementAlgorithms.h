@@ -17,7 +17,7 @@ public:
 	static MovementAlgorithms::Steering* LookWhereYouAreGoing(Kinematic * i_char, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot);
 	static MovementAlgorithms::Steering* Face(Kinematic * i_char, Kinematic * i_target, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot);
 	static MovementAlgorithms::Steering* DynamicArrive(Kinematic* i_char, Kinematic* i_target, float maxAccel, float i_targetRadius, float i_slowRadius);
-	static MovementAlgorithms::Steering* DynamicWander(Kinematic* i_char, float wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular,float maxLinear);
+	static MovementAlgorithms::Steering* DynamicWander(Kinematic* i_char, float& wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular,float maxLinear);
 
 private:
 	
