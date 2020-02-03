@@ -37,7 +37,7 @@ void ofApp::update(){
 			break;
 		case 2:
 			ofSetWindowTitle("Dynamic Arrive - Delegating To Look Where You Are Going");
-			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);
+			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 850.0f)->m_linear);
 			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 3:
@@ -52,6 +52,8 @@ void ofApp::update(){
 			simulationIndex = 0;
 			break;
 	}
+
+	CheckBoundaries();
 }
 
 //--------------------------------------------------------------
@@ -160,4 +162,24 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::CheckBoundaries()
+{
+	if (boid->GetKinematic()->GetPosition().x < 0.0f)
+	{
+		boid->GetKinematic()->SetPosition(ofVec2f(1025.0f, boid->GetKinematic()->GetPosition().y));
+	}
+	else if (boid->GetKinematic()->GetPosition().x > 1025.0f)
+	{
+		boid->GetKinematic()->SetPosition(ofVec2f(0.0f, boid->GetKinematic()->GetPosition().y));
+	}
+	else if (boid->GetKinematic()->GetPosition().y > 800.0f)
+	{
+		boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x,0.0f));
+	}
+	else if (boid->GetKinematic()->GetPosition().y < 0.0f)
+	{
+		boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x,800.0f));
+	}
 }
