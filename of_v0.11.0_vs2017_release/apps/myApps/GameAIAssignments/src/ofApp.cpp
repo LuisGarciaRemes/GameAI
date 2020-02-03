@@ -3,16 +3,18 @@
 #include "ofAppRunner.h"
 #include "../MovementAlgorithms.h"
 #include <random>
+#include "ofAppGLFWWindow.h"
 
 Boid* boid;
 int simulationIndex = 0;
 Kinematic* target;
 MovementAlgorithms::Steering* steering;
 float wanderOrientation = 0.0f;
+ofCamera camera;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofBackground(0, 255, 255);
+	ofBackground(0, 255, 255);	
 	boid = new Boid(50.0f, 700.0f, 0.0f,10.0f);
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
@@ -72,6 +74,7 @@ void ofApp::draw(){
 	ofSetColor(0,0,0);
 	ofDrawCircle(boid->GetKinematic()->GetPosition(), boid->GetRadius());
 	ofDrawTriangle(boid->GetTriangle()->point1, boid->GetTriangle()->point2, boid->GetTriangle()->point3);
+
 }
 
 //--------------------------------------------------------------

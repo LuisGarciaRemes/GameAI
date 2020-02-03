@@ -60,14 +60,14 @@ void MovementAlgorithms::SnapToDirectionOfTravel(Kinematic * i_kinematic)
 	i_kinematic->SetOrientation(atan2(i_kinematic->GetVelocity().y, i_kinematic->GetVelocity().x));
 }
 
-MovementAlgorithms::Steering* MovementAlgorithms::DynamicSeek(Kinematic * i_char, Kinematic * i_target, float maxAccel)
+MovementAlgorithms::Steering* MovementAlgorithms::DynamicSeek(Kinematic * i_char, Kinematic * i_target, float i_maxLinear)
 {
 	MovementAlgorithms::Steering* steering = new MovementAlgorithms::Steering();
 
 	steering->m_linear = i_target->GetPosition() - i_char->GetPosition();
 
 	steering->m_linear = steering->m_linear.normalize();
-	steering->m_linear *= maxAccel;
+	steering->m_linear *= i_maxLinear;
 
 	steering->m_angular = 0;
 
@@ -116,7 +116,7 @@ MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kine
 	return result;
 }
 
-MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic * i_char, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot)
+MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic * i_char, float i_targetRadius, float i_slowRadius, float i_maxAngular, float i_maxRot)
 {
 	Kinematic* i_target = new Kinematic(0.0f, 0.0f, 0.0f);
 
@@ -129,10 +129,10 @@ MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic
 
 	i_target->SetOrientation(atan2(vel.y,vel.x));
 
-	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
+	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, i_maxAngular, i_maxRot);
 }
 
-MovementAlgorithms::Steering * MovementAlgorithms::Face(Kinematic * i_char, Kinematic * i_target, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot)
+MovementAlgorithms::Steering * MovementAlgorithms::Face(Kinematic * i_char, Kinematic * i_target, float i_targetRadius, float i_slowRadius, float i_maxAngular, float i_maxRot)
 {
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
 
@@ -145,10 +145,10 @@ MovementAlgorithms::Steering * MovementAlgorithms::Face(Kinematic * i_char, Kine
 
 	i_target->SetOrientation(atan2(direction.y, direction.x));
 
-	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
+	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, i_maxAngular, i_maxRot);
 }
 
-MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_char, Kinematic * i_target, float maxAccel, float i_targetRadius, float i_slowRadius)
+MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_char, Kinematic * i_target, float i_maxLinear, float i_targetRadius, float i_slowRadius)
 {
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
 
@@ -178,10 +178,10 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_c
 	result->m_linear = targetVel - i_char->GetVelocity();
 	result->m_linear /= 0.1f;
 
-	if (result->m_linear.length() > maxAccel)
+	if (result->m_linear.length() > i_maxLinear)
 	{
 		result->m_linear = result->m_linear.normalize();
-		result->m_linear *= maxAccel;
+		result->m_linear *= i_maxLinear;
 	}
 
 	result->m_angular = 0.0f;
@@ -189,27 +189,66 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_c
 	return result;
 }
 
-MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_char, float& wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular, float maxLinear)
+MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_char, float& i_wanderOrientation, float i_wanderOffset, float i_wanderRadius, float i_wanderRate, float i_maxAngular, float i_maxLinear)
 {
 
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
 
 	Kinematic* i_target = new Kinematic(0.0f, 0.0f, 0.0f);
 
-	wanderOrientation += (rand()-rand()) * wanderRate;
+	i_wanderOrientation += (rand()-rand()) * i_wanderRate;
 
-	float targetOrientation = wanderOrientation + i_char->GetOrientation();
+	float targetOrientation = i_wanderOrientation + i_char->GetOrientation();
 
-	i_target->SetPosition(i_char->GetPosition() + wanderOffset * (ofVec2f(cos(i_char->GetOrientation()),sin(i_char->GetOrientation()))));
+	i_target->SetPosition(i_char->GetPosition() + i_wanderOffset * (ofVec2f(cos(i_char->GetOrientation()),sin(i_char->GetOrientation()))));
 
-	i_target->SetPosition(i_target->GetPosition() + wanderRadius * (ofVec2f(cos(targetOrientation), sin(targetOrientation))));
+	i_target->SetPosition(i_target->GetPosition() + i_wanderRadius * (ofVec2f(cos(targetOrientation), sin(targetOrientation))));
 
-	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f,maxAngular, PI);
+	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f, i_maxAngular, PI);
 
-	result->m_linear = maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
+	result->m_linear = i_maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
 
 	ofLog(OF_LOG_NOTICE) << "the linear is " << ofToString(result->m_linear);
 	ofLog(OF_LOG_NOTICE) << "the angular is " << ofToString(result->m_angular);
+
+	return result;
+}
+
+MovementAlgorithms::Steering * MovementAlgorithms::Separation(Kinematic * i_char, std::vector<Kinematic*> i_targets, float i_threshold, float i_decayCoefficient, float i_maxLinear)
+{
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	for (Kinematic * target : i_targets)
+	{
+		ofVec2f direction = target->GetPosition() - i_char->GetPosition();
+		float distance = direction.length();
+
+		if (distance < i_threshold)
+		{
+			float strength = MIN(i_decayCoefficient/(pow(distance,2)), i_maxLinear);
+
+			direction = direction.normalize();
+			result->m_linear += strength * direction;
+		}
+	}
+
+	return result;
+}
+
+MovementAlgorithms::Steering * MovementAlgorithms::VelocityMatch(Kinematic * i_char, Kinematic * i_target, float i_maxLinear)
+{
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	result->m_linear = i_target->GetLinear() - i_char->GetVelocity();
+	result->m_linear /= 0.1f;
+
+	if (result->m_linear.length() > i_maxLinear)
+	{
+		result->m_linear = result->m_linear.normalize();
+		result->m_linear *= i_maxLinear;
+	}
+
+	result->m_angular = 0.0f;
 
 	return result;
 }
