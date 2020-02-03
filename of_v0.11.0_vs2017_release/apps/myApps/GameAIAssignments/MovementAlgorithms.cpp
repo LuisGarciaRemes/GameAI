@@ -1,4 +1,6 @@
 #include "MovementAlgorithms.h"
+#include "ofLog.h"
+#include "ofUtils.h"
 
 void MovementAlgorithms::BasicMotion(Kinematic* i_kinematic)
 {
@@ -132,6 +134,24 @@ MovementAlgorithms::Steering* MovementAlgorithms::LookWhereYouAreGoing(Kinematic
 	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
 }
 
+MovementAlgorithms::Steering * MovementAlgorithms::Face(Kinematic * i_char, Kinematic * i_target, float i_targetRadius, float i_slowRadius, float maxAngular, float maxRot)
+{
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	ofVec2f direction = i_target->GetPosition() - i_char->GetPosition();
+
+	if (direction.length() == 0)
+	{
+		result->m_angular = i_target->GetAngular();
+		result->m_linear = i_target->GetLinear();
+		return  result;
+	}
+
+	i_target->SetOrientation(atan2(-direction.x, direction.y));
+
+	return MovementAlgorithms::Align(i_char, i_target, i_targetRadius, i_slowRadius, maxAngular, maxRot);
+}
+
 MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_char, Kinematic * i_target, float maxAccel, float i_targetRadius, float i_slowRadius)
 {
 	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
@@ -161,6 +181,28 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicArrive(Kinematic * i_c
 	}
 
 	result->m_angular = 0.0f;
+
+	return result;
+}
+
+MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_char, float wanderOrientation, float wanderOffset, float wanderRadius, float wanderRate, float maxAngular, float maxLinear)
+{
+
+	MovementAlgorithms::Steering* result = new MovementAlgorithms::Steering();
+
+	Kinematic* i_target = new Kinematic(0.0f, 0.0f, 0.0f);
+
+	wanderOrientation += (rand()-rand()) * wanderRate;
+
+	float targetOrientation = wanderOrientation + i_char->GetOrientation();
+
+	i_target->SetPosition(i_char->GetPosition() + wanderOffset * (ofVec2f(cos(i_char->GetOrientation()),sin(i_char->GetOrientation()))));
+
+	i_target->SetPosition(i_target->GetPosition() + wanderRadius * (ofVec2f(cos(targetOrientation), sin(targetOrientation))));
+
+	result = MovementAlgorithms::Face(i_char, i_target, wanderRadius, wanderOffset,maxAngular, .25f);
+
+	result->m_linear = maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
 
 	return result;
 }

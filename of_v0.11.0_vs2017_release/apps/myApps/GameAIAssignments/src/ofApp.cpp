@@ -2,10 +2,12 @@
 #include "../Boid.h"
 #include "ofAppRunner.h"
 #include "../MovementAlgorithms.h"
+#include <random>
 
 Boid* boid;
 int simulationIndex = 0;
 Kinematic* target;
+MovementAlgorithms::Steering* steering;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -13,6 +15,7 @@ void ofApp::setup(){
 	boid = new Boid(50.0f, 700.0f, 0.0f,10.0f);
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
+	srand(time(0));
 }
 
 //--------------------------------------------------------------
@@ -22,18 +25,25 @@ void ofApp::update(){
 	switch (simulationIndex)
 	{
 		case 0:
+			ofSetWindowTitle("Basic Motion");
 			MovementAlgorithms::BasicMotion(boid->GetKinematic());
 			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
 			break;
 		case 1:
+			ofSetWindowTitle("Dynamic Seek");
 			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 10.0f)->m_linear);		
-			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*100, .25f, PI)->m_angular);
+			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 2:
+			ofSetWindowTitle("Dynamic Arrive");
 			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);
-			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*100, .25f, PI)->m_angular);
+			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 3:
+			ofSetWindowTitle("Dynamic Wander");
+			steering = MovementAlgorithms::DynamicWander(boid->GetKinematic(), 0.0698132f, 10.0f, 500.0f, 10.0f, .25f, 10.0f);
+			boid->GetKinematic()->SetLinear(steering->m_linear);
+			boid->GetKinematic()->SetAngular(steering->m_angular);
 			break;
 		case 4:
 			break;
