@@ -12,6 +12,7 @@ public:
 	void SetVelocity(ofVec2f i_vel);
 	void SetLinear(ofVec2f i_linear);
 	void SetAngular(float i_angular);
+	void SetRotation(float i_rot);
 	void SetOrientation(float i_z);
 	float GetOrientation();
 	float GetRotation();

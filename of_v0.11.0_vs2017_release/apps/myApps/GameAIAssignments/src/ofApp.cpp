@@ -26,13 +26,16 @@ void ofApp::update(){
 			MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
 			break;
 		case 1:
-			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);		
-			//MovementAlgorithms::SnapToDirectionOfTravel(boid->GetKinematic());
-			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132*4, 0.0698132*20, .25f, 2*PI)->m_angular);
+			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 10.0f)->m_linear);		
+			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*100, .25f, PI)->m_angular);
 			break;
 		case 2:
+			boid->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boid->GetKinematic(), target, 10.0f, 10.0f, 600.0f)->m_linear);
+			boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132, 0.0698132*100, .25f, PI)->m_angular);
 			break;
 		case 3:
+			break;
+		case 4:
 			break;
 		default:
 			simulationIndex = 0;
@@ -64,9 +67,12 @@ void ofApp::keyPressed(int key){
 	if (key == OF_KEY_LEFT || key == OF_KEY_RIGHT)
 	{
 		boid->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetRotation(0.0f);
+		boid->GetKinematic()->SetOrientation(0.0f);
 		boid->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
 		boid->GetKinematic()->SetAngular(0.0f);
 		boid->GetKinematic()->SetPosition(ofVec2f(50.0f, 700.0f));
+		target->SetPosition(ofVec2f(50.0f, 700.0f));
 		boid->ClearBreadCrumbs();
 		boid->GetKinematic()->m_basicMotionIndex = 0;
 
@@ -96,8 +102,12 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 
-	if (simulationIndex > 0)
+	if (simulationIndex > 0 && simulationIndex < 3)
 	{
+		boid->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetRotation(0.0f);
+		boid->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
+		boid->GetKinematic()->SetAngular(0.0f);
 		target->SetPosition(ofVec2f(x, y));
 		boid->ClearBreadCrumbs();
 	}

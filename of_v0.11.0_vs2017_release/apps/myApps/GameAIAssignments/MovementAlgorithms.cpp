@@ -79,14 +79,7 @@ MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kine
 	float rotation = i_target->GetOrientation() - i_char->GetOrientation();
 
 	
-	if (rotation > PI)
-	{
-		rotation = PI;
-	}
-	else if(rotation < -PI)
-	{
-		rotation = -PI;
-	}
+	rotation = CLAMP(rotation,-PI,PI);
 
 	float rotationSize = abs(rotation);
 	float targetRotation;
@@ -117,7 +110,7 @@ MovementAlgorithms::Steering* MovementAlgorithms::Align(Kinematic * i_char, Kine
 			result->m_angular /= angularAcceleration;
 			result->m_angular *= i_maxAngular;
 		}
-		
+	
 		result->m_linear = ofVec2f(0.0f,0.0f);
 
 	return result;

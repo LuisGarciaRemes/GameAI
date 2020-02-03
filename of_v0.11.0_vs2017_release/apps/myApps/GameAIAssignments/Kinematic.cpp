@@ -35,6 +35,11 @@ void Kinematic::SetAngular(float i_angular)
 	m_angular = i_angular;
 }
 
+void Kinematic::SetRotation(float i_rot)
+{
+	m_rotation = i_rot;
+}
+
 void Kinematic::SetOrientation(float i_z)
 {
 	m_orientation = i_z;
