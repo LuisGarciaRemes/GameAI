@@ -45,6 +45,11 @@ void Kinematic::SetOrientation(float i_z)
 	m_orientation = i_z;
 }
 
+void Kinematic::SetMass(float i_mass)
+{
+	m_mass = i_mass;
+}
+
 float Kinematic::GetOrientation()
 {
 	return m_orientation;
@@ -60,6 +65,11 @@ float Kinematic::GetAngular()
 	return m_angular;
 }
 
+float Kinematic::GetMass()
+{
+	return m_mass;
+}
+
 Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 {
 	m_position.set(i_x,i_y);
@@ -69,6 +79,7 @@ Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 	m_maxSpeed = 150.0f;
 	m_angular = 0.0f;
 	m_linear.set(0.0f, 0.0f);
+	m_mass = 10.0f;
 }
 
 Kinematic::Kinematic()
@@ -80,6 +91,7 @@ Kinematic::Kinematic()
 	m_maxSpeed = 150.0f;
 	m_angular = 0.0f;
 	m_linear.set(0.0f, 0.0f);
+	m_mass = 10.0f;
 }
 
 Kinematic::~Kinematic()

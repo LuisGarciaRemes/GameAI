@@ -14,9 +14,11 @@ public:
 	void SetAngular(float i_angular);
 	void SetRotation(float i_rot);
 	void SetOrientation(float i_z);
+	void SetMass(float i_mass);
 	float GetOrientation();
 	float GetRotation();
 	float GetAngular();
+	float GetMass();
 	Kinematic(float i_x, float i_y, float i_orientation);
 	Kinematic();
 	~Kinematic();
@@ -37,5 +39,7 @@ private:
 
 	ofVec2f m_linear;
 	float m_angular;
+
+	float m_mass;
 };
 
