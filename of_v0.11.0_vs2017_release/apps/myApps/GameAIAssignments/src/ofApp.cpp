@@ -78,14 +78,14 @@ void ofApp::update(){
 		case 3:
 			//The King wanders
 			ofSetWindowTitle("Dynamic Wander - Delegating To Face");
-			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, .25f, 5.0f);
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 2.0f, 10.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
 			break;
 		case 4:
 			//The King wanders
 			ofSetWindowTitle("Flock - 10 Total Boids");
-			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, .25f, 5.0f);
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 2.0f, 10.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
 

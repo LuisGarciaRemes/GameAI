@@ -196,7 +196,10 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_c
 
 	Kinematic* i_target = new Kinematic(0.0f, 0.0f, 0.0f);
 
-	i_wanderOrientation += (rand()-rand()) * i_wanderRate;
+	float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	float r2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	i_wanderOrientation += (r1-r2) * i_wanderRate;
 
 	float targetOrientation = i_wanderOrientation + i_char->GetOrientation();
 
@@ -207,9 +210,6 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_c
 	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f, i_maxAngular, PI);
 
 	result->m_linear = i_maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
-
-	ofLog(OF_LOG_NOTICE) << "the linear is " << ofToString(result->m_linear);
-	ofLog(OF_LOG_NOTICE) << "the angular is " << ofToString(result->m_angular);
 
 	return result;
 }
