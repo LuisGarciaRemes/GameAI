@@ -220,15 +220,18 @@ MovementAlgorithms::Steering * MovementAlgorithms::Separation(Kinematic * i_char
 
 	for (Kinematic * target : i_targets)
 	{
-		ofVec2f direction = target->GetPosition() - i_char->GetPosition();
-		float distance = direction.length();
-
-		if (distance < i_threshold)
+		if (target != i_char)
 		{
-			float strength = MIN(i_decayCoefficient/(pow(distance,2)), i_maxLinear);
+			ofVec2f direction = target->GetPosition() - i_char->GetPosition();
+			float distance = direction.length();
 
-			direction = direction.normalize();
-			result->m_linear += strength * direction;
+			if (distance < i_threshold)
+			{
+				float strength = MIN(i_decayCoefficient / (pow(distance, 2)), i_maxLinear);
+
+				direction = direction.normalize();
+				result->m_linear += strength * direction;
+			}
 		}
 	}
 

@@ -6,6 +6,7 @@
 
 Boid* boidKing;
 std::vector<Boid*> loyalSubjects;
+std::vector<Kinematic*> loyalSubjectsKinematics;
 int simulationIndex = 0;
 Kinematic* target;
 MovementAlgorithms::Steering* steering;
@@ -19,7 +20,7 @@ float yVelSum = 0.0f;
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
-	boidKing = new Boid(50.0f, 700.0f, 0.0f,10.0f,20.0f);
+	boidKing = new Boid(50.0f, 700.0f, 0.0f,10.0f,100.0f);
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(time(0));
@@ -28,12 +29,15 @@ void ofApp::setup(){
 	{
 		Boid* boid = new Boid(50.0f + (i*50.0f), 300.0f, 0.0f, 10.0f, 10.0f);
 		loyalSubjects.push_back(boid);
+		loyalSubjectsKinematics.push_back(boid->GetKinematic());
 
 		boid = new Boid(50.0f + (i*50.0f), 350.0f, 0.0f, 10.0f, 10.0f);
 		loyalSubjects.push_back(boid);
+		loyalSubjectsKinematics.push_back(boid->GetKinematic());
 
 		boid = new Boid(50.0f + (i*50.0f), 400.0f, 0.0f, 10.0f, 10.0f);
 		loyalSubjects.push_back(boid);
+		loyalSubjectsKinematics.push_back(boid->GetKinematic());
 	}
 
 	totalMass = boidKing->GetKinematic()->GetMass();
@@ -114,6 +118,8 @@ void ofApp::update(){
 			for (Boid* boid : loyalSubjects)
 			{
 				//To Do add (1 arrive (2 look at where you are going (3 separate (4 velocity match
+				boid->GetKinematic()->SetLinear((.8)*MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 10.0f)->m_linear + (1)*MovementAlgorithms::Separation(boid->GetKinematic(),loyalSubjectsKinematics,50.0f, 0.01f, 10.0f)->m_linear + (.6) *MovementAlgorithms::VelocityMatch(boid->GetKinematic(),target, 10.0f)->m_linear);
+				boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			}
 			break;
 		default:
@@ -263,17 +269,42 @@ void ofApp::CheckBoundaries()
 	if (boidKing->GetKinematic()->GetPosition().x < 0.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(1025.0f, boidKing->GetKinematic()->GetPosition().y));
+
+		if (simulationIndex == 4) {
+			for (Boid* boid : loyalSubjects)
+			{
+				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x + 1025.0f, boid->GetKinematic()->GetPosition().y));
+			}
+		}
 	}
 	else if (boidKing->GetKinematic()->GetPosition().x > 1025.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(0.0f, boidKing->GetKinematic()->GetPosition().y));
+		if (simulationIndex == 4) {
+			for (Boid* boid : loyalSubjects)
+			{
+				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x - 1025.0f, boid->GetKinematic()->GetPosition().y));
+			}
+		}
 	}
 	else if (boidKing->GetKinematic()->GetPosition().y > 800.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(boidKing->GetKinematic()->GetPosition().x,0.0f));
+		if (simulationIndex == 4) {
+			for (Boid* boid : loyalSubjects)
+			{
+				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x, boid->GetKinematic()->GetPosition().y - 800.0f));
+			}
+		}
 	}
 	else if (boidKing->GetKinematic()->GetPosition().y < 0.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(boidKing->GetKinematic()->GetPosition().x,800.0f));
+		if (simulationIndex == 4) {
+			for (Boid* boid : loyalSubjects)
+			{
+				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x, boid->GetKinematic()->GetPosition().y + 800.0f));
+			}
+		}
 	}
 }
