@@ -2,7 +2,7 @@
 #include "ofLog.h"
 #include "ofUtils.h"
 
-Boid::Boid(float i_x, float i_y,float i_orientation, float i_radius)
+Boid::Boid(float i_x, float i_y,float i_orientation, float i_radius, float i_mass)
 {
 	m_kinematic = new Kinematic(i_x,i_y,i_orientation);
 	m_radius = i_radius;
@@ -16,6 +16,7 @@ Boid::Boid(float i_x, float i_y,float i_orientation, float i_radius)
 	Breadcrumb crumb;
 	crumb.pos = ofVec2f(GetKinematic()->GetPosition());
 	m_breadCrumbs.push_back(crumb);
+	m_kinematic->SetMass(i_mass);
 }
 
 Boid::~Boid()

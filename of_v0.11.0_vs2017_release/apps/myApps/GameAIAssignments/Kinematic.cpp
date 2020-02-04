@@ -79,7 +79,7 @@ Kinematic::Kinematic(float i_x, float i_y, float i_orientation)
 	m_maxSpeed = 150.0f;
 	m_angular = 0.0f;
 	m_linear.set(0.0f, 0.0f);
-	m_mass = 10.0f;
+	m_mass = 0.0f;
 }
 
 Kinematic::Kinematic()
@@ -91,7 +91,7 @@ Kinematic::Kinematic()
 	m_maxSpeed = 150.0f;
 	m_angular = 0.0f;
 	m_linear.set(0.0f, 0.0f);
-	m_mass = 10.0f;
+	m_mass = 0.0f;
 }
 
 Kinematic::~Kinematic()

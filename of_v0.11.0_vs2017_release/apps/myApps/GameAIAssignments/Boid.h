@@ -19,7 +19,7 @@ public:
 		ofVec2f pos;
 	};
 
-	Boid(float i_x, float i_y, float i_orientation, float i_radius);
+	Boid(float i_x, float i_y, float i_orientation, float i_radius, float i_mass);
 	~Boid();
 	Kinematic* GetKinematic();
 	float GetRadius();
