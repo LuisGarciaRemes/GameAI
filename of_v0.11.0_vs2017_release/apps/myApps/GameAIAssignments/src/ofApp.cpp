@@ -71,18 +71,18 @@ void ofApp::update(){
 			//The King arrives to mouse click
 			ofSetWindowTitle("Dynamic Arrive Version 1 - Delegating To Look Where You Are Going");
 			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 10.0f, 10.0f, 850.0f)->m_linear);
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, 2 * PI)->m_angular);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
 			break;
 		case 2:
 			//The King arrives to mouse click
 			ofSetWindowTitle("Dynamic Arrive Version 2 - Delegating To Look Where You Are Going");
-			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 15.0f, 20.0f, 500.0f)->m_linear);
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*200.0f, .25f, 2*PI)->m_angular);
+			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 15.0f, 10.0f, 500.0f)->m_linear);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*50.0f, .25f, 2*PI)->m_angular);
 			break;
 		case 3:
 			//The King wanders
 			ofSetWindowTitle("Dynamic Wander Version 1 - Delegating To Face");
-			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 5.0f, 10.0f);
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 2.0f, 10.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
 			break;
