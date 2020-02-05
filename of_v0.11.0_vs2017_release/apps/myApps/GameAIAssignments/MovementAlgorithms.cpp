@@ -207,7 +207,7 @@ MovementAlgorithms::Steering * MovementAlgorithms::DynamicWander(Kinematic * i_c
 
 	i_target->SetPosition(i_target->GetPosition() + i_wanderRadius * (ofVec2f(cos(targetOrientation), sin(targetOrientation))));
 
-	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f, i_maxAngular, PI);
+	result = MovementAlgorithms::Face(i_char, i_target, 0.0698132f, 0.0698132f*100.0f, i_maxAngular, 2*PI);
 
 	result->m_linear = i_maxLinear * ofVec2f(cos(i_char->GetOrientation()), sin(i_char->GetOrientation()));
 
@@ -222,10 +222,10 @@ MovementAlgorithms::Steering * MovementAlgorithms::Separation(Kinematic * i_char
 	{
 		if (target != i_char)
 		{
-			ofVec2f direction = target->GetPosition() - i_char->GetPosition();
+			ofVec2f direction = i_char->GetPosition() - target->GetPosition();
 			float distance = direction.length();
 
-			if (distance < i_threshold)
+			if (distance <= i_threshold)
 			{
 				float strength = MIN(i_decayCoefficient / (pow(distance, 2)), i_maxLinear);
 

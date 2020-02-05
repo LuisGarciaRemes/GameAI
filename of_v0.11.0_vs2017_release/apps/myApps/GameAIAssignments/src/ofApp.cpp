@@ -20,22 +20,22 @@ float yVelSum = 0.0f;
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
-	boidKing = new Boid(50.0f, 700.0f, 0.0f,10.0f,100.0f);
+	boidKing = new Boid(50.0f, 700.0f, 0.0f,10.0f,500.0f);
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(time(0));
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		Boid* boid = new Boid(50.0f + (i*50.0f), 300.0f, 0.0f, 10.0f, 10.0f);
+		Boid* boid = new Boid(50.0f + (i*50.0f), 250.0f, 0.0f, 10.0f, 10.0f);
+		loyalSubjects.push_back(boid);
+		loyalSubjectsKinematics.push_back(boid->GetKinematic());
+
+		boid = new Boid(50.0f + (i*50.0f), 300.0f, 0.0f, 10.0f, 10.0f);
 		loyalSubjects.push_back(boid);
 		loyalSubjectsKinematics.push_back(boid->GetKinematic());
 
 		boid = new Boid(50.0f + (i*50.0f), 350.0f, 0.0f, 10.0f, 10.0f);
-		loyalSubjects.push_back(boid);
-		loyalSubjectsKinematics.push_back(boid->GetKinematic());
-
-		boid = new Boid(50.0f + (i*50.0f), 400.0f, 0.0f, 10.0f, 10.0f);
 		loyalSubjects.push_back(boid);
 		loyalSubjectsKinematics.push_back(boid->GetKinematic());
 	}
@@ -68,28 +68,35 @@ void ofApp::update(){
 			MovementAlgorithms::SnapToDirectionOfTravel(boidKing->GetKinematic());
 			break;
 		case 1:
-			//The King seeks to mouse click
-			ofSetWindowTitle("Dynamic Seek - Delegating To Look Where You Are Going");
-			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicSeek(boidKing->GetKinematic(), target, 10.0f)->m_linear);		
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
+			//The King arrives to mouse click
+			ofSetWindowTitle("Dynamic Arrive Version 1 - Delegating To Look Where You Are Going");
+			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 10.0f, 10.0f, 850.0f)->m_linear);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, 2 * PI)->m_angular);
 			break;
 		case 2:
 			//The King arrives to mouse click
-			ofSetWindowTitle("Dynamic Arrive - Delegating To Look Where You Are Going");
-			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 10.0f, 10.0f, 850.0f)->m_linear);
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
+			ofSetWindowTitle("Dynamic Arrive Version 2 - Delegating To Look Where You Are Going");
+			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 15.0f, 20.0f, 500.0f)->m_linear);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, 2*PI)->m_angular);
 			break;
 		case 3:
 			//The King wanders
-			ofSetWindowTitle("Dynamic Wander - Delegating To Face");
-			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 2.0f, 10.0f);
+			ofSetWindowTitle("Dynamic Wander Version 1 - Delegating To Face");
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 5.0f, 10.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
 			break;
 		case 4:
 			//The King wanders
+			ofSetWindowTitle("Dynamic Wander Version 2 - Delegating To Face");
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 5000.0f, 30.0f, 10.0f);
+			boidKing->GetKinematic()->SetLinear(steering->m_linear);
+			boidKing->GetKinematic()->SetAngular(steering->m_angular);
+			break;
+		case 5:
+			//The King wanders
 			ofSetWindowTitle("Flock - 10 Total Boids");
-			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 2.0f, 10.0f);
+			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 30.0f, 5.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
 
@@ -118,8 +125,8 @@ void ofApp::update(){
 			for (Boid* boid : loyalSubjects)
 			{
 				//To Do add (1 arrive (2 look at where you are going (3 separate (4 velocity match
-				boid->GetKinematic()->SetLinear((.8)*MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 10.0f)->m_linear + (1)*MovementAlgorithms::Separation(boid->GetKinematic(),loyalSubjectsKinematics,50.0f, 0.01f, 10.0f)->m_linear + (.6) *MovementAlgorithms::VelocityMatch(boid->GetKinematic(),target, 10.0f)->m_linear);
-				boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, PI)->m_angular);
+				boid->GetKinematic()->SetLinear((0.9f)*MovementAlgorithms::DynamicSeek(boid->GetKinematic(), target, 15.0f)->m_linear + (1)*MovementAlgorithms::Separation(boid->GetKinematic(),loyalSubjectsKinematics,75.0f, 500000.0f, 15.0f)->m_linear + (0.4f) *MovementAlgorithms::VelocityMatch(boid->GetKinematic(),target, 15.0f)->m_linear);
+				boid->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boid->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, 2*PI)->m_angular);
 			}
 			break;
 		default:
@@ -144,12 +151,21 @@ void ofApp::draw(){
 	}
 
 	//Draws boidKing
-	ofSetColor(0,0,0);
+	if (simulationIndex == 5)
+	{
+		ofSetColor(150, 0, 150);
+	}
+	else
+	{
+		ofSetColor(0, 0, 0);
+	}
+
 	ofDrawCircle(boidKing->GetKinematic()->GetPosition(), boidKing->GetRadius());
 	ofDrawTriangle(boidKing->GetTriangle()->point1, boidKing->GetTriangle()->point2, boidKing->GetTriangle()->point3);
 
+	ofSetColor(0, 0, 0);
 	//Draws boidSubjects
-	if (simulationIndex == 4)
+	if (simulationIndex == 5)
 	{
 		for (Boid* boid : loyalSubjects)
 		{
@@ -172,6 +188,8 @@ void ofApp::keyPressed(int key){
 		boidKing->GetKinematic()->SetAngular(0.0f);
 		boidKing->GetKinematic()->m_basicMotionIndex = 0;
 
+		wanderOrientation = 0.0f;
+
 		//Reset target just in case
 		target->SetPosition(ofVec2f(50.0f, 700.0f));
 		target->SetLinear(ofVec2f(0.0f, 0.0f));
@@ -187,13 +205,31 @@ void ofApp::keyPressed(int key){
 
 
 		//Special starting positions
-		if (simulationIndex == 3)
+		if (simulationIndex == 3 || simulationIndex == 4)
 		{
 			boidKing->GetKinematic()->SetPosition(ofVec2f(50.0f, 350.0f));
 		}
-		else if (simulationIndex == 4)
+		else if (simulationIndex == 5)
 		{
-			boidKing->GetKinematic()->SetPosition(ofVec2f(200.0f, 350.0f));
+			boidKing->GetKinematic()->SetPosition(ofVec2f(550.0f, 400.0f));
+
+			loyalSubjectsKinematics.clear();
+			loyalSubjects.clear();
+
+			for (int i = 0; i < 10; i++)
+			{
+				Boid* boid = new Boid(50.0f + (i*50.0f), 250.0f, 0.0f, 10.0f, 10.0f);
+				loyalSubjects.push_back(boid);
+				loyalSubjectsKinematics.push_back(boid->GetKinematic());
+
+				boid = new Boid(50.0f + (i*50.0f), 300.0f, 0.0f, 10.0f, 10.0f);
+				loyalSubjects.push_back(boid);
+				loyalSubjectsKinematics.push_back(boid->GetKinematic());
+
+				boid = new Boid(50.0f + (i*50.0f), 350.0f, 0.0f, 10.0f, 10.0f);
+				loyalSubjects.push_back(boid);
+				loyalSubjectsKinematics.push_back(boid->GetKinematic());
+			}
 		}
 		else
 		{
@@ -270,7 +306,7 @@ void ofApp::CheckBoundaries()
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(1025.0f, boidKing->GetKinematic()->GetPosition().y));
 
-		if (simulationIndex == 4) {
+		if (simulationIndex == 5) {
 			for (Boid* boid : loyalSubjects)
 			{
 				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x + 1025.0f, boid->GetKinematic()->GetPosition().y));
@@ -280,7 +316,7 @@ void ofApp::CheckBoundaries()
 	else if (boidKing->GetKinematic()->GetPosition().x > 1025.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(0.0f, boidKing->GetKinematic()->GetPosition().y));
-		if (simulationIndex == 4) {
+		if (simulationIndex == 5) {
 			for (Boid* boid : loyalSubjects)
 			{
 				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x - 1025.0f, boid->GetKinematic()->GetPosition().y));
@@ -290,7 +326,7 @@ void ofApp::CheckBoundaries()
 	else if (boidKing->GetKinematic()->GetPosition().y > 800.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(boidKing->GetKinematic()->GetPosition().x,0.0f));
-		if (simulationIndex == 4) {
+		if (simulationIndex == 5) {
 			for (Boid* boid : loyalSubjects)
 			{
 				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x, boid->GetKinematic()->GetPosition().y - 800.0f));
@@ -300,7 +336,7 @@ void ofApp::CheckBoundaries()
 	else if (boidKing->GetKinematic()->GetPosition().y < 0.0f)
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(boidKing->GetKinematic()->GetPosition().x,800.0f));
-		if (simulationIndex == 4) {
+		if (simulationIndex == 5) {
 			for (Boid* boid : loyalSubjects)
 			{
 				boid->GetKinematic()->SetPosition(ofVec2f(boid->GetKinematic()->GetPosition().x, boid->GetKinematic()->GetPosition().y + 800.0f));
