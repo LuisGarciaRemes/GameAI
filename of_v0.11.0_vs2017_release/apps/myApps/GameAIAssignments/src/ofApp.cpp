@@ -77,7 +77,7 @@ void ofApp::update(){
 			//The King arrives to mouse click
 			ofSetWindowTitle("Dynamic Arrive Version 2 - Delegating To Look Where You Are Going");
 			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 15.0f, 20.0f, 500.0f)->m_linear);
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*100.0f, .25f, 2*PI)->m_angular);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*200.0f, .25f, 2*PI)->m_angular);
 			break;
 		case 3:
 			//The King wanders
@@ -95,7 +95,7 @@ void ofApp::update(){
 			break;
 		case 5:
 			//The King wanders
-			ofSetWindowTitle("Flock - 10 Total Boids");
+			ofSetWindowTitle("Flock - 30 Total Boids");
 			steering = MovementAlgorithms::DynamicWander(boidKing->GetKinematic(), wanderOrientation, 100.0f, 500.0f, 500.0f, 30.0f, 5.0f);
 			boidKing->GetKinematic()->SetLinear(steering->m_linear);
 			boidKing->GetKinematic()->SetAngular(steering->m_angular);
