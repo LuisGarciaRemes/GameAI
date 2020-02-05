@@ -1,6 +1,6 @@
 {
 	"advancedMode": false,
-	"defaultOfPath": "C:\\Users\\LuisA\\Documents\\GitHub\\GameAI\\of_v0.11.0_vs2017_release",
+	"defaultOfPath": "../",
 	"defaultPlatform": "vs",
 	"defaultRelativeProjectPath": "apps/myApps",
 	"showConsole": false,
