@@ -13,3 +13,6 @@ You can press the left arrow key to restart the current simulation.
 You can press the right arrow key to move to the next simulation.
 
 The current simulation title is displayed in the window bar.
+
+Note: if for some reason there is an error while running that says it cant find the openframeworks files. If you download them from the openframeworks website and drop them into the repo and add any missing file to of_v0.11.0_vs2017_release it should work.
+Not sure why this is happening since I added all the files to the repo anyway
