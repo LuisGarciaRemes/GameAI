@@ -75,13 +75,13 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, 
 
 	while (currRecord.m_node != i_start)
 	{
-		if (path.empty)
+		if (path.empty())
 		{
 			path.push_back(currRecord.m_node);
 		}
 		else
 		{
-			path.insert(path.begin, currRecord.m_node);
+			path.insert(path.begin(), currRecord.m_node);
 		}
 
 		currRecord = closedList.Find(currRecord.m_incomingEdge.GetSource());

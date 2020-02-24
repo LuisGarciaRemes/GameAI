@@ -68,7 +68,7 @@ public:
 				if (element.first.m_node == i_node)
 				{
 					temp = element.first;
-					elements.erase(elements.begin + counter);
+					elements.erase(elements.begin() + counter);
 				}
 				counter++;
 			}
