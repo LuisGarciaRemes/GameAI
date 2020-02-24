@@ -87,7 +87,7 @@ public:
 
 	};
 
-	std::vector<int> Dijkstra(DirectedGraph i_graph, int i_start, int i_goal);
+	std::vector<int> Dijkstra(DirectedGraph* i_graph, int i_start, int i_goal);
 
 private:
 

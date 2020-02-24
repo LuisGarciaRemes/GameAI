@@ -1,6 +1,6 @@
 #include "SearchAlgorithms.h"
 
-std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, int i_goal)
+std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph* i_graph, int i_start, int i_goal)
 {
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
@@ -25,7 +25,7 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, 
 			break;
 		}
 
-		currEdges = i_graph.GetOutgoingEdges(currRecord.m_node);
+		currEdges = i_graph->GetOutgoingEdges(currRecord.m_node);
 
 		for (DirectedWeightedEdge edge : currEdges)
 		{

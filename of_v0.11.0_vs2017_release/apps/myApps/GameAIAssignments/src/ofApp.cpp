@@ -18,6 +18,8 @@ void ofApp::setup(){
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(time(0));
+
+	DirectedGraph graph = DirectedGraph::DirectedGraph("DirectedGraphs/MyHouseDirectedGraph.csv");
 }
 
 //--------------------------------------------------------------

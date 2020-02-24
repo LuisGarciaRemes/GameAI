@@ -4,11 +4,72 @@
 
 DirectedGraph::DirectedGraph(std::string i_filename)
 {
-
+	char line[100];
 	std::fstream stream;
 	stream.open(i_filename,std::ios::in);
-	
 
+	stream.getline(line,100);
+
+	int source;
+	int sink;
+	float cost;
+
+	while (line[0] != '\0')
+	{
+		std::string temp = "";
+
+		int index = 0;
+
+		for (char c : line)
+		{
+			if (c == ',')
+			{
+				switch (index)
+				{
+					case 0:
+						source = std::atoi(temp.c_str());
+						temp = "";
+						break;
+					case 1:
+						sink = std::atoi(temp.c_str());
+						temp = "";
+						break;
+					default:
+						break;
+				}
+
+				index++;
+			}
+			else if (c == '\0')
+			{
+				cost = std::atof(temp.c_str());
+				break;
+			}
+			else
+			{
+				temp += c;
+			}			
+		}
+
+		if (source == m_directedGraph.size())
+		{
+			std::vector<DirectedWeightedEdge> tempEdges;
+
+			tempEdges.push_back(DirectedWeightedEdge(source, sink, cost));
+
+			m_directedGraph.push_back(tempEdges);
+
+			//std::cout << "source: " << source << " sink: " << sink  << " cost: " << cost << "\n";
+		}
+		else
+		{
+			m_directedGraph[source].push_back(DirectedWeightedEdge(source, sink, cost));
+
+			//std::cout << "source: " << source << " sink: " << sink << " cost: " << cost << "\n";
+		}
+
+		stream.getline(line, 100);
+	}
 
 	stream.close();
 }
