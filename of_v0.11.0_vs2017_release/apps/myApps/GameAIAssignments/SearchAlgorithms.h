@@ -58,15 +58,19 @@ public:
 			}
 		}
 
+		//Find returns the desired node and removes it from vector
 		NodeRecord Find(int i_node)
 		{
+			int counter = 0;
 			NodeRecord temp;
 			for (std::pair<NodeRecord, int> element : elements)
 			{
 				if (element.first.m_node == i_node)
 				{
 					temp = element.first;
+					elements.erase(elements.begin + counter);
 				}
+				counter++;
 			}
 			return temp;
 		}
@@ -83,7 +87,7 @@ public:
 
 	};
 
-	std::vector<DirectedWeightedEdge> Dijkstra(DirectedGraph i_graph, int i_start, int i_goal);
+	std::vector<int> Dijkstra(DirectedGraph i_graph, int i_start, int i_goal);
 
 private:
 

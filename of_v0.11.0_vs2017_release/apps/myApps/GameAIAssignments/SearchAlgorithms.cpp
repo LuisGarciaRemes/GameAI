@@ -1,6 +1,6 @@
 #include "SearchAlgorithms.h"
 
-std::vector<DirectedWeightedEdge> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, int i_goal)
+std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, int i_goal)
 {
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
@@ -15,6 +15,7 @@ std::vector<DirectedWeightedEdge> SearchAlgorithms::Dijkstra(DirectedGraph i_gra
 	PriorityQueue closedList;
 	openList.PriorityInsert(startRecord, startRecord.m_costSoFar);
 
+	//Search through while open list is not empty or until goal is found
 	while (!openList.Empty())
 	{
 		currRecord = openList.GetNext();
@@ -44,6 +45,8 @@ std::vector<DirectedWeightedEdge> SearchAlgorithms::Dijkstra(DirectedGraph i_gra
 
 				if (sinkRecord.m_costSoFar <= sinkNodeCost)
 				{
+					//do nothing and put it back
+					openList.PriorityInsert(sinkRecord, sinkRecord.m_costSoFar);
 					continue;
 				}
 			}
@@ -54,36 +57,36 @@ std::vector<DirectedWeightedEdge> SearchAlgorithms::Dijkstra(DirectedGraph i_gra
 
 			sinkRecord.m_costSoFar = sinkNodeCost;
 			sinkRecord.m_incomingEdge = edge;
-
-			if(!openList.Contains(sinkNode))
-			{
-				openList.PriorityInsert(sinkRecord,sinkRecord.m_costSoFar);
-			}
+			openList.PriorityInsert(sinkRecord,sinkRecord.m_costSoFar);
 		}		
+
+		//put the last checked node into the closed list
+		closedList.PriorityInsert(currRecord, currRecord.m_costSoFar);
 	}
 
-	closedList.PriorityInsert(currRecord, currRecord.m_costSoFar);
-
+	//if goal not found return empty path
 	if (currRecord.m_node != i_goal)
 	{
-		return std::vector<DirectedWeightedEdge>();
+		return std::vector<int>();
 	}
 
-	std::vector<DirectedWeightedEdge> path;
+	//Traverse and generate path
+	std::vector<int> path;
 
 	while (currRecord.m_node != i_start)
 	{
 		if (path.empty)
 		{
-			path.push_back(currRecord.m_incomingEdge);
+			path.push_back(currRecord.m_node);
 		}
 		else
 		{
-			path.insert(path.begin, currRecord.m_incomingEdge);
+			path.insert(path.begin, currRecord.m_node);
 		}
 
-		currRecord = currRecord.m_incomingEdge.GetSource();
+		currRecord = closedList.Find(currRecord.m_incomingEdge.GetSource());
 	}
 
+	//return path
 	return path;
 }
