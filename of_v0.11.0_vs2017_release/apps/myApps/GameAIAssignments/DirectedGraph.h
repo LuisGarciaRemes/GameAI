@@ -11,6 +11,6 @@ class DirectedGraph
 		std::vector<DirectedWeightedEdge> GetOutgoingEdges(int i_nodeId);
 
 	private:
-		std::vector<DirectedWeightedEdge> m_directedGraph;
+		std::vector<std::vector<DirectedWeightedEdge>> m_directedGraph;
 };
 
