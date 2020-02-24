@@ -1,6 +1,5 @@
 #pragma once
 #include "Kinematic.h"
-#include <vector>
 
 class Boid
 {

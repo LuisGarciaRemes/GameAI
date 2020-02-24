@@ -181,15 +181,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Boid.cpp" />
+    <ClCompile Include="DirectedGraph.cpp" />
+    <ClCompile Include="DirectedWeightedEdge.cpp" />
     <ClCompile Include="Kinematic.cpp" />
     <ClCompile Include="MovementAlgorithms.cpp" />
+    <ClCompile Include="SearchAlgorithms.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boid.h" />
+    <ClInclude Include="DirectedGraph.h" />
+    <ClInclude Include="DirectedWeightedEdge.h" />
     <ClInclude Include="Kinematic.h" />
     <ClInclude Include="MovementAlgorithms.h" />
+    <ClInclude Include="SearchAlgorithms.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>

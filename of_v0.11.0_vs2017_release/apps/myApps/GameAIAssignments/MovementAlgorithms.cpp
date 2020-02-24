@@ -223,6 +223,7 @@ MovementAlgorithms::Steering * MovementAlgorithms::Separation(Kinematic * i_char
 		if (target != i_char)
 		{
 			ofVec2f direction = i_char->GetPosition() - target->GetPosition();
+
 			float distance = direction.length();
 
 			if (distance <= i_threshold)
