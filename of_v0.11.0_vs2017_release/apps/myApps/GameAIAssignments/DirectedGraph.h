@@ -6,7 +6,7 @@ class DirectedGraph
 
 	public:
 
-		DirectedGraph();
+		DirectedGraph(std::string i_filename);
 		~DirectedGraph();
 		std::vector<DirectedWeightedEdge> GetOutgoingEdges(int i_nodeId);
 

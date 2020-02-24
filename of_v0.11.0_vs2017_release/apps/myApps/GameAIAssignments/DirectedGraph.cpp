@@ -1,7 +1,16 @@
 #include "DirectedGraph.h"
+#include <fstream>
+#include  <iostream>
 
-DirectedGraph::DirectedGraph()
+DirectedGraph::DirectedGraph(std::string i_filename)
 {
+
+	std::fstream stream;
+	stream.open(i_filename,std::ios::in);
+	
+
+
+	stream.close();
 }
 
 DirectedGraph::~DirectedGraph()

@@ -11,8 +11,6 @@ Kinematic* target;
 MovementAlgorithms::Steering* steering;
 float wanderOrientation = 0.0f;
 
-SearchAlgorithms::PriorityQueue test;
-
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
@@ -20,21 +18,6 @@ void ofApp::setup(){
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(time(0));
-
-	SearchAlgorithms::NodeRecord temp1;
-	SearchAlgorithms::NodeRecord temp2;
-	SearchAlgorithms::NodeRecord temp3;
-	SearchAlgorithms::NodeRecord temp4;
-
-	test.PriorityInsert(temp1,6);
-	test.PriorityInsert(temp2,1);
-	test.PriorityInsert(temp3,5);
-	test.PriorityInsert(temp4,7);
-
-	for (std::pair<SearchAlgorithms::NodeRecord,int> element : test.elements)
-	{
-		ofLog(OF_LOG_NOTICE, "the priority is " + ofToString(element.second));
-	}
 }
 
 //--------------------------------------------------------------
