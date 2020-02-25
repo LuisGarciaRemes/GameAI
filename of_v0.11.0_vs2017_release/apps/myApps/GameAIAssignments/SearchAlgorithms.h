@@ -89,6 +89,8 @@ public:
 
 	std::vector<int> Dijkstra(DirectedGraph* i_graph, int i_start, int i_goal);
 
+	std::vector<int> RandomAStar(DirectedGraph* i_graph, int i_start, int i_goal, int i_seed);
+
 private:
 
 };
