@@ -77,7 +77,7 @@ void ofApp::update(){
 			//The King arrives to mouse click
 			ofSetWindowTitle("Dynamic Arrive Version 2 - Delegating To Look Where You Are Going");
 			boidKing->GetKinematic()->SetLinear(MovementAlgorithms::DynamicArrive(boidKing->GetKinematic(), target, 15.0f, 10.0f, 500.0f)->m_linear);
-			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*50.0f, .25f, 2*PI)->m_angular);
+			boidKing->GetKinematic()->SetAngular(MovementAlgorithms::LookWhereYouAreGoing(boidKing->GetKinematic(), 0.0698132f, 0.0698132f*50.0f, .25f, PI)->m_angular);
 			break;
 		case 3:
 			//The King wanders
