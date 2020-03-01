@@ -14,6 +14,11 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 	int sink;
 	float cost;
 
+	if (!stream.is_open())
+	{
+		std::cout << i_filename.c_str() << " was not opened please check the file path";
+	}
+
 	while (line[0] != '\0')
 	{
 		std::string temp = "";
@@ -70,6 +75,8 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 
 		stream.getline(line, 100);
 	}
+
+	std::cout << i_filename.c_str() << " was loaded into DirectedGraph object\n";
 
 	stream.close();
 }

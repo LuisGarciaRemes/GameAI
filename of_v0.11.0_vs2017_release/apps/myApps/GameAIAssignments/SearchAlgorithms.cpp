@@ -1,6 +1,7 @@
 #include "SearchAlgorithms.h"
+#include <iostream>
 
-std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph* i_graph, int i_start, int i_goal)
+std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, int i_goal)
 {
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
@@ -25,7 +26,7 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph* i_graph, int i_start,
 			break;
 		}
 
-		currEdges = i_graph->GetOutgoingEdges(currRecord.m_node);
+		currEdges = i_graph.GetOutgoingEdges(currRecord.m_node);
 
 		for (DirectedWeightedEdge edge : currEdges)
 		{
@@ -50,10 +51,8 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph* i_graph, int i_start,
 					continue;
 				}
 			}
-			else
-			{
-				sinkRecord.m_node = sinkNode;
-			}
+	
+			sinkRecord.m_node = sinkNode;
 
 			sinkRecord.m_costSoFar = sinkNodeCost;
 			sinkRecord.m_incomingEdge = edge;
@@ -87,14 +86,14 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph* i_graph, int i_start,
 		currRecord = closedList.Find(currRecord.m_incomingEdge.GetSource());
 	}
 
+	path.insert(path.begin(), i_start);
+
 	//return path
 	return path;
 }
 
-std::vector<int> SearchAlgorithms::RandomAStar(DirectedGraph * i_graph, int i_start, int i_goal, int i_seed)
+std::vector<int> SearchAlgorithms::AStar(DirectedGraph i_graph, int i_start, int i_goal, Heuristic i_heuristic)
 {
-	srand(i_seed);
-
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
 	std::vector<DirectedWeightedEdge> currEdges;
@@ -118,13 +117,13 @@ std::vector<int> SearchAlgorithms::RandomAStar(DirectedGraph * i_graph, int i_st
 			break;
 		}
 
-		currEdges = i_graph->GetOutgoingEdges(currRecord.m_node);
+		currEdges = i_graph.GetOutgoingEdges(currRecord.m_node);
 
 		for (DirectedWeightedEdge edge : currEdges)
 		{
 			int sinkNode = edge.GetSink();
 
-			int sinkNodeCost = currRecord.m_costSoFar + edge.GetCost() + (rand() % 500);
+			int sinkNodeCost = currRecord.m_costSoFar + edge.GetCost() + i_heuristic.getEstimate(sinkNode);
 
 			NodeRecord sinkRecord;
 
@@ -143,10 +142,8 @@ std::vector<int> SearchAlgorithms::RandomAStar(DirectedGraph * i_graph, int i_st
 					continue;
 				}
 			}
-			else
-			{
-				sinkRecord.m_node = sinkNode;
-			}
+
+			sinkRecord.m_node = sinkNode;
 
 			sinkRecord.m_costSoFar = sinkNodeCost;
 			sinkRecord.m_incomingEdge = edge;
@@ -180,6 +177,25 @@ std::vector<int> SearchAlgorithms::RandomAStar(DirectedGraph * i_graph, int i_st
 		currRecord = closedList.Find(currRecord.m_incomingEdge.GetSource());
 	}
 
+	path.insert(path.begin(), i_start);
+
 	//return path
 	return path;
+}
+
+void SearchAlgorithms::PrintPath(std::vector<int> i_path)
+{
+	std::cout << "The path found is: ";
+
+	for (int node : i_path)
+	{
+		std::cout << node << ",";
+	}
+
+	std::cout << "\n";
+}
+
+int SearchAlgorithms::Heuristic::getEstimate(int i_node)
+{
+	return m_heuristicList[i_node];
 }

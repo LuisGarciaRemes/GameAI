@@ -12,6 +12,17 @@ public:
 		float m_estimateToGoal = 0;
 	};
 
+	struct Heuristic {
+
+		Heuristic(std::vector<int> i_estimates)
+		{
+			m_heuristicList = i_estimates;
+		}
+		std::vector<int> m_heuristicList;
+		virtual int getEstimate(int i_node);
+	};
+
+
 	struct PriorityQueue {	
 		std::vector<std::pair<NodeRecord, int>> elements;
 		
@@ -42,7 +53,7 @@ public:
 		NodeRecord GetNext()
 		{
 			NodeRecord temp = elements.front().first;
-			elements.pop_back();
+			elements.erase(elements.begin());
 			return temp;
 		}
 
@@ -54,8 +65,8 @@ public:
 				{
 					return true;
 				}
-				return false;
 			}
+			return false;
 		}
 
 		//Find returns the desired node and removes it from vector
@@ -69,6 +80,7 @@ public:
 				{
 					temp = element.first;
 					elements.erase(elements.begin() + counter);
+					return temp;
 				}
 				counter++;
 			}
@@ -87,9 +99,11 @@ public:
 
 	};
 
-	std::vector<int> Dijkstra(DirectedGraph* i_graph, int i_start, int i_goal);
+	static std::vector<int> Dijkstra(DirectedGraph i_graph, int i_start, int i_goal);
 
-	std::vector<int> RandomAStar(DirectedGraph* i_graph, int i_start, int i_goal, int i_seed);
+	static std::vector<int> AStar(DirectedGraph i_graph, int i_start, int i_goal, Heuristic i_heuristic);
+
+	static void PrintPath(std::vector<int> i_path);
 
 private:
 

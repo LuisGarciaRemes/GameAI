@@ -20,15 +20,15 @@ DirectedWeightedEdge::~DirectedWeightedEdge()
 
 float DirectedWeightedEdge::GetCost()
 {
-	return 0.0f;
+	return m_cost;
 }
 
 int DirectedWeightedEdge::GetSource()
 {
-	return 0;
+	return m_source;
 }
 
 int DirectedWeightedEdge::GetSink()
 {
-	return 0;
+	return m_sink;
 }
