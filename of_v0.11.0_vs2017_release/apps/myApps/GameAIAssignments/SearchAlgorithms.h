@@ -1,5 +1,6 @@
 #pragma once
 #include "DirectedGraph.h"
+#include "ofVec2f.h"
 class SearchAlgorithms
 {
 
@@ -21,6 +22,56 @@ public:
 		Heuristic();
 		std::vector<int> m_heuristicList;
 		virtual int getEstimate(int i_node);
+	};
+
+	struct Grid {
+
+		int m_grid[12][16];
+
+		Grid()
+		{
+			int nodeId = 0;
+
+			for (int i = 0; i <12 ; i++)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					m_grid[i][j] = nodeId;
+					nodeId++;
+				}
+			}
+		}
+
+		int GetContainingNode(ofVec2f i_position)
+		{
+			for (int i = 0; i < 12; i++)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					if ((i_position.x > j * 64 && i_position.x < j * 64 + 64) && (i_position.y > i * 64 && i_position.y < i * 64 + 64))
+					{
+						return m_grid[i][j];
+					}
+				}
+			}
+			return -1;
+		}
+
+		ofVec2f GetCenterOfNode(int i_node)
+		{
+			for (int i = 0; i < 12; i++)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					if (m_grid[i][j] == i_node)
+					{
+						return ofVec2f(j*64+32,i*64+32);
+					}
+				}
+			}
+			return ofVec2f(-100.0f,-100.0f);
+		}
+
 	};
 
 

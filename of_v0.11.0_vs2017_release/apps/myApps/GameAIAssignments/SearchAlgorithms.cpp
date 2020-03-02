@@ -192,7 +192,7 @@ void SearchAlgorithms::PrintPath(std::vector<int> i_path)
 		std::cout << node << ",";
 	}
 
-	std::cout << "\n";
+	std::cout << "\n\n";
 }
 
 SearchAlgorithms::Heuristic::Heuristic()

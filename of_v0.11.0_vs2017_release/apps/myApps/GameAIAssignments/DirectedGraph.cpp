@@ -16,7 +16,7 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 
 	if (!stream.is_open())
 	{
-		std::cout << i_filename.c_str() << " was not opened please check the file path";
+		std::cout << i_filename.c_str() << " was not opened please check the file path\n\n";
 	}
 
 	while (line[0] != '\0')
@@ -60,7 +60,14 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 		{
 			std::vector<DirectedWeightedEdge> tempEdges;
 
-			tempEdges.push_back(DirectedWeightedEdge(source, sink, cost));
+			if (sink >= 0)
+			{
+				tempEdges.push_back(DirectedWeightedEdge(source, sink, cost));
+			}
+			else
+			{
+				std::cout << "created empty " << " sink: " << sink << "\n";
+			}
 
 			m_directedGraph.push_back(tempEdges);
 
@@ -68,7 +75,14 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 		}
 		else
 		{
-			m_directedGraph[source].push_back(DirectedWeightedEdge(source, sink, cost));
+			if (sink >= 0)
+			{
+				m_directedGraph[source].push_back(DirectedWeightedEdge(source, sink, cost));				
+			}
+			else
+			{
+				std::cout << "was empty " << " sink: " << sink << "\n";
+			}
 
 			//std::cout << "source: " << source << " sink: " << sink << " cost: " << cost << "\n";
 		}
@@ -76,7 +90,7 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 		stream.getline(line, 100);
 	}
 
-	std::cout << i_filename.c_str() << " was loaded into DirectedGraph object\n";
+	std::cout << i_filename.c_str() << " was loaded into DirectedGraph object\n\n";
 
 	stream.close();
 }

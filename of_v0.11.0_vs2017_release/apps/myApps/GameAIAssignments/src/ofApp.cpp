@@ -11,19 +11,22 @@ MovementAlgorithms::Steering* steering;
 
 DirectedGraph romeGraph;
 DirectedGraph homeGraph;
+DirectedGraph gridGraph;
 SearchAlgorithms::Heuristic romeConstant;
 SearchAlgorithms::Heuristic homeConstant;
 SearchAlgorithms::Heuristic romeRandom;
 SearchAlgorithms::Heuristic homeRandom;
 
+bool displayGrid = false;
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
-	boidKing = new Boid(50.0f, 700.0f, 0.0f,10.0f,500.0f);
+	boidKing = new Boid(ofGetWindowWidth()/2+32, ofGetWindowHeight()/2+32, 0.0f,10.0f,500.0f);
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
-	srand(time(0));
-	
+	srand(343);
+
 	homeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/MyHouseDirectedGraph.csv");
 	romeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/RomeDirectedGraph.csv");
 
@@ -86,6 +89,71 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
+	//Draws Grid
+	if (displayGrid)
+	{
+		ofSetColor(0, 0, 0);
+		for (int i = 1; i < 16; i++)
+		{
+			ofDrawLine(0 + i * 64, 0, 0 + i * 64, ofGetWindowHeight());
+		}
+
+		for (int i = 1; i < 12; i++)
+		{
+			ofDrawLine(0, 0 + i * 64, ofGetWindowWidth(), 0 + i * 64);
+		}
+	}
+
+	//Draws Obstacles
+	ofSetColor(0, 0, 0);
+	ofDrawCircle(5 * 64 + 32, 3 * 64 + 32, 32);
+	ofDrawCircle(8 * 64 + 32, 8 * 64 + 32, 32);
+	ofDrawCircle(8 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(12 * 64 + 32, 3 * 64 + 32, 32);
+	ofDrawCircle(15 * 64 + 32, 11 * 64 + 32, 32);
+	ofDrawCircle(1 * 64 + 32, 0 * 64 + 32, 32);
+	ofDrawCircle(12 * 64 + 32, 0 * 64 + 32, 32);
+	ofDrawCircle(1 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(1 * 64 + 32, 2 * 64 + 32, 32);
+	ofDrawCircle(5 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(6 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(7 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(8 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(10 * 64 + 32, 1 * 64 + 32, 32);
+	ofDrawCircle(14 * 64 + 32, 2 * 64 + 32, 32);
+	ofDrawCircle(8 * 64 + 32, 3 * 64 + 32, 32);
+	ofDrawCircle(9 * 64 + 32, 3 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 4 * 64 + 32, 32);
+	ofDrawCircle(9 * 64 + 32, 4 * 64 + 32, 32);
+	ofDrawCircle(1 * 64 + 32, 5 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 5 * 64 + 32, 32);
+	ofDrawCircle(4 * 64 + 32, 5 * 64 + 32, 32);
+	ofDrawCircle(6 * 64 + 32, 5 * 64 + 32, 32);
+	ofDrawCircle(10 * 64 + 32, 6 * 64 + 32, 32);
+	ofDrawCircle(12 * 64 + 32, 6 * 64 + 32, 32);
+	ofDrawCircle(13 * 64 + 32, 6 * 64 + 32, 32);
+	ofDrawCircle(0 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(4 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(12 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(13 * 64 + 32, 7 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 8 * 64 + 32, 32);
+	ofDrawCircle(4 * 64 + 32, 8 * 64 + 32, 32);
+	ofDrawCircle(6 * 64 + 32, 8 * 64 + 32, 32);
+	ofDrawCircle(10 * 64 + 32, 8 * 64 + 32, 32);
+	ofDrawCircle(2 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(3 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(4 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(6 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(10 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(12 * 64 + 32, 9 * 64 + 32, 32);
+	ofDrawCircle(6 * 64 + 32, 10 * 64 + 32, 32);
+	ofDrawCircle(7 * 64 + 32, 10 * 64 + 32, 32);
+	ofDrawCircle(9 * 64 + 32, 10 * 64 + 32, 32);
+	ofDrawCircle(10 * 64 + 32, 10 * 64 + 32, 32);
+	ofDrawCircle(0 * 64 + 32, 11 * 64 + 32, 32);
+
 	//Draws BreadCrumbs
 	for (Boid::Breadcrumb crumb : boidKing->GetCrumbs())
 	{
@@ -95,26 +163,26 @@ void ofApp::draw(){
 		ofDrawBox(temp,4);
 	}
 
-
+	//Draws Boid
 	ofSetColor(150, 0, 150);
-
-
 	ofDrawCircle(boidKing->GetKinematic()->GetPosition(), boidKing->GetRadius());
 	ofDrawTriangle(boidKing->GetTriangle()->point1, boidKing->GetTriangle()->point2, boidKing->GetTriangle()->point3);
 
-	ofSetColor(0, 0, 0);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
 	
+	if (key == 32)
+	{
+		displayGrid = !displayGrid;
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+	
 }
 
 //--------------------------------------------------------------
