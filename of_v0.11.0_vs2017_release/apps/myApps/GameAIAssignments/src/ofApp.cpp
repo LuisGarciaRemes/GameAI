@@ -2,20 +2,22 @@
 #include "../Boid.h"
 #include "ofAppRunner.h"
 #include "../MovementAlgorithms.h"
-#include "../SearchAlgorithms.h"
 #include <random>
 
 Boid* boidKing;
-Kinematic* target;
+Kinematic* clickTarget;
+Kinematic* moveTarget;
 MovementAlgorithms::Steering* steering;
 
 DirectedGraph romeGraph;
 DirectedGraph homeGraph;
 DirectedGraph gridGraph;
+SearchAlgorithms::Grid grid;
 SearchAlgorithms::Heuristic romeConstant;
 SearchAlgorithms::Heuristic homeConstant;
 SearchAlgorithms::Heuristic romeRandom;
 SearchAlgorithms::Heuristic homeRandom;
+SearchAlgorithms::Heuristic gridEuclidian;
 
 bool displayGrid = false;
 
@@ -23,12 +25,15 @@ bool displayGrid = false;
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
 	boidKing = new Boid(ofGetWindowWidth()/2+32, ofGetWindowHeight()/2+32, 0.0f,10.0f,500.0f);
-	target = new Kinematic();
-	target->SetPosition(ofVec2f(50.0f, 700.0f));
+	clickTarget = new Kinematic();
+	clickTarget->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(343);
 
+	gridGraph = DirectedGraph::DirectedGraph("DirectedGraphs/GridDirectedGraph.csv");
 	homeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/MyHouseDirectedGraph.csv");
 	romeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/RomeDirectedGraph.csv");
+
+	grid = SearchAlgorithms::Grid();
 
 	std::vector<int> tempConstant;
 	std::vector<int> tempRandom;
@@ -202,8 +207,14 @@ void ofApp::mousePressed(int x, int y, int button){
 		boidKing->GetKinematic()->SetRotation(0.0f);
 		boidKing->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
 		boidKing->GetKinematic()->SetAngular(0.0f);
-		target->SetPosition(ofVec2f(x, y));
+		clickTarget->SetPosition(ofVec2f(x, y));
 		boidKing->ClearBreadCrumbs();
+
+		std::cout << "Running A* on grid graph with euclidan distance\n";
+		int goal = grid.GetContainingNode(clickTarget->GetPosition());
+		gridEuclidian = SearchAlgorithms::Heuristic(GetEcluidianHeuristic(grid, gridGraph, goal));
+		std::vector<int>path = SearchAlgorithms::AStar(gridGraph, grid.GetContainingNode(boidKing->GetKinematic()->GetPosition()),goal, gridEuclidian);
+		SearchAlgorithms::PrintPath(path);
 }
 
 //--------------------------------------------------------------
@@ -254,4 +265,23 @@ void ofApp::CheckBoundaries()
 	{
 		boidKing->GetKinematic()->SetPosition(ofVec2f(boidKing->GetKinematic()->GetPosition().x,800.0f));
 	}
+}
+
+std::vector<int> ofApp::GetEcluidianHeuristic(SearchAlgorithms::Grid i_gridGraph, DirectedGraph i_graph, int i_goal)
+{
+	std::vector<int> temp;
+	ofVec2f goalPos = i_gridGraph.GetCenterOfNode(i_goal);
+
+	for (int i = 0; i < i_graph.GetTotalNodes(); i++)
+	{
+		ofVec2f currPos = i_gridGraph.GetCenterOfNode(i);
+
+		ofVec2f distance = currPos - goalPos;
+
+		int result = sqrt(pow(distance.x,2) + pow(distance.y, 2));
+
+		temp.push_back(result);
+	}
+
+	return temp;
 }

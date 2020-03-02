@@ -10,9 +10,9 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 
 	stream.getline(line,100);
 
-	int source;
-	int sink;
-	float cost;
+	int source = 0;
+	int sink = 0;
+	float cost = 0.0f;
 
 	if (!stream.is_open())
 	{
@@ -66,7 +66,7 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 			}
 			else
 			{
-				std::cout << "created empty " << " sink: " << sink << "\n";
+				//std::cout << "created empty " << " sink: " << sink << "\n";
 			}
 
 			m_directedGraph.push_back(tempEdges);
@@ -81,7 +81,7 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 			}
 			else
 			{
-				std::cout << "was empty " << " sink: " << sink << "\n";
+				//std::cout << "was empty " << " sink: " << sink << "\n";
 			}
 
 			//std::cout << "source: " << source << " sink: " << sink << " cost: " << cost << "\n";

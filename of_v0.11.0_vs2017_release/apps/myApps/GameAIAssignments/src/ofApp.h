@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "../SearchAlgorithms.h"
 
 class ofApp : public ofBaseApp{
 
@@ -21,5 +22,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		void CheckBoundaries();
+
+		std::vector<int> GetEcluidianHeuristic(SearchAlgorithms::Grid i_grid, DirectedGraph i_graph, int i_goal);
 		
 };
