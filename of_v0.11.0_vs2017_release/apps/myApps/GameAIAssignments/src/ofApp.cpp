@@ -9,6 +9,13 @@ Boid* boidKing;
 Kinematic* target;
 MovementAlgorithms::Steering* steering;
 
+DirectedGraph romeGraph;
+DirectedGraph homeGraph;
+SearchAlgorithms::Heuristic romeConstant;
+SearchAlgorithms::Heuristic homeConstant;
+SearchAlgorithms::Heuristic romeRandom;
+SearchAlgorithms::Heuristic homeRandom;
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(0, 255, 255);	
@@ -16,10 +23,53 @@ void ofApp::setup(){
 	target = new Kinematic();
 	target->SetPosition(ofVec2f(50.0f, 700.0f));
 	srand(time(0));
+	
+	homeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/MyHouseDirectedGraph.csv");
+	romeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/RomeDirectedGraph.csv");
 
-	DirectedGraph homeGraph = DirectedGraph::DirectedGraph("DirectedGraphs/MyHouseDirectedGraph.csv");
+	std::vector<int> tempConstant;
+	std::vector<int> tempRandom;
+
+	for (int i = 0; i < homeGraph.GetTotalNodes(); i++)
+	{
+		tempConstant.push_back(homeGraph.GetTotalNodes());
+		tempRandom.push_back(rand() % 50);
+	}
+
+	homeRandom = SearchAlgorithms::Heuristic(tempRandom);
+	homeConstant = SearchAlgorithms::Heuristic(tempConstant);
+
+	for (int i = 0; i < romeGraph.GetTotalNodes(); i++)
+	{
+		tempConstant.push_back(romeGraph.GetTotalNodes());
+		tempRandom.push_back(rand() % 500);
+	}
+
+	romeRandom = SearchAlgorithms::Heuristic(tempRandom);
+	romeConstant = SearchAlgorithms::Heuristic(tempConstant);
+
 	std::cout << "Running Dijkstra on small graph\n";
 	std::vector<int> path = SearchAlgorithms::Dijkstra(homeGraph,18,11);
+	SearchAlgorithms::PrintPath(path);
+
+	std::cout << "Running Dijkstra on large graph\n";
+	path = SearchAlgorithms::Dijkstra(romeGraph, 180, 2568);
+	SearchAlgorithms::PrintPath(path);
+
+	std::cout << "Running A* on small graph with contant estimate\n";
+	path = SearchAlgorithms::AStar(homeGraph, 18, 11, homeConstant);
+	SearchAlgorithms::PrintPath(path);
+
+	std::cout << "Running A* on large graph with contant estimate\n";
+	path = SearchAlgorithms::AStar(romeGraph, 180, 2568, romeConstant);
+	SearchAlgorithms::PrintPath(path);
+
+	std::cout << "Running A* on small graph with random estimate\n";
+	path = SearchAlgorithms::AStar(homeGraph, 18, 11, homeRandom);
+	SearchAlgorithms::PrintPath(path);
+
+	std::cout << "Running A* on large graph with random estimate\n";
+	path = SearchAlgorithms::AStar(romeGraph, 180, 2568,romeRandom);
 	SearchAlgorithms::PrintPath(path);
 }
 

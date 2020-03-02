@@ -18,6 +18,7 @@ public:
 		{
 			m_heuristicList = i_estimates;
 		}
+		Heuristic();
 		std::vector<int> m_heuristicList;
 		virtual int getEstimate(int i_node);
 	};

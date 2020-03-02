@@ -81,6 +81,10 @@ DirectedGraph::DirectedGraph(std::string i_filename)
 	stream.close();
 }
 
+DirectedGraph::DirectedGraph()
+{
+}
+
 DirectedGraph::~DirectedGraph()
 {
 }
@@ -88,4 +92,9 @@ DirectedGraph::~DirectedGraph()
 std::vector<DirectedWeightedEdge> DirectedGraph::GetOutgoingEdges(int i_nodeId)
 {	
 	return m_directedGraph[i_nodeId];
+}
+
+int DirectedGraph::GetTotalNodes()
+{
+	return m_directedGraph.size();
 }

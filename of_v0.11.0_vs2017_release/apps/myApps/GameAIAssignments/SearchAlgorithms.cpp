@@ -195,6 +195,10 @@ void SearchAlgorithms::PrintPath(std::vector<int> i_path)
 	std::cout << "\n";
 }
 
+SearchAlgorithms::Heuristic::Heuristic()
+{
+}
+
 int SearchAlgorithms::Heuristic::getEstimate(int i_node)
 {
 	return m_heuristicList[i_node];
