@@ -27,9 +27,6 @@ MovementAlgorithms::Steering Pathfinding::ArrivePath(Kinematic * i_char, std::ve
 
 	target->SetPosition(targetPos);
 
-	std::cout << "going to node " << i_path[m_pathIndex] <<"\n";
-	std::cout << "distance is " << distance << "\n";
-
 	temp.m_linear = MovementAlgorithms::DynamicArrive(i_char, target, i_maxLinear, i_targetRadiusLinear, i_slowRadiusLinear)->m_linear;
 	temp.m_angular = MovementAlgorithms::LookWhereYouAreGoing(i_char, i_targetRadiusAngular, i_slowRadiusAngular, i_maxAngular, i_maxRot)->m_angular;
 
