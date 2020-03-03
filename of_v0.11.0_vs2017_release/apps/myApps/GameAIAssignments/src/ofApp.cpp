@@ -95,7 +95,7 @@ void ofApp::update(){
 	//pathfinds
 	if (!path.empty())
 	{
-		MovementAlgorithms::Steering result = pathfinding.ArrivePath(boidKing->GetKinematic(), path, grid,10.0f, 10.0f, 10.0f, 0.0698132f, 150.0f, 0.0698132f*100.0f, .25f, PI);
+		MovementAlgorithms::Steering result = pathfinding.ArrivePath(boidKing->GetKinematic(), path, grid,15.0f, 10.0f, 10.0f, 0.0698132f, 150.0f, 0.0698132f*50.0f, .5f, PI);
 		boidKing->GetKinematic()->SetAngular(result.m_angular);
 		boidKing->GetKinematic()->SetLinear(result.m_linear);
 	}
@@ -230,6 +230,7 @@ void ofApp::mousePressed(int x, int y, int button){
 
 		if (!gridGraph.GetOutgoingEdges(goal).empty() && goal != current)
 		{
+			pathfinding.ResetPathIndex();
 			gridEuclidian = SearchAlgorithms::Heuristic(GetEcluidianHeuristic(grid, gridGraph, goal));
 			path = SearchAlgorithms::AStar(gridGraph, grid.GetContainingNode(boidKing->GetKinematic()->GetPosition()), goal, gridEuclidian);
 			SearchAlgorithms::PrintPath(path);
