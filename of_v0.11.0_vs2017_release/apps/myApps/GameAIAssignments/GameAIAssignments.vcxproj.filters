@@ -15,6 +15,7 @@
     <ClCompile Include="DirectedWeightedEdge.cpp" />
     <ClCompile Include="DirectedGraph.cpp" />
     <ClCompile Include="SearchAlgorithms.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -36,6 +37,7 @@
     <ClInclude Include="DirectedWeightedEdge.h" />
     <ClInclude Include="DirectedGraph.h" />
     <ClInclude Include="SearchAlgorithms.h" />
+    <ClInclude Include="Pathfinding.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
