@@ -2,11 +2,11 @@
 #include "../Boid.h"
 #include "ofAppRunner.h"
 #include "../MovementAlgorithms.h"
+#include "../Pathfinding.h"
 #include <random>
 
 Boid* boidKing;
 Kinematic* clickTarget;
-Kinematic* moveTarget;
 MovementAlgorithms::Steering* steering;
 
 DirectedGraph romeGraph;
@@ -18,6 +18,9 @@ SearchAlgorithms::Heuristic homeConstant;
 SearchAlgorithms::Heuristic romeRandom;
 SearchAlgorithms::Heuristic homeRandom;
 SearchAlgorithms::Heuristic gridEuclidian;
+
+std::vector<int> path;
+Pathfinding pathfinding;
 
 bool displayGrid = false;
 
@@ -57,7 +60,7 @@ void ofApp::setup(){
 	romeConstant = SearchAlgorithms::Heuristic(tempConstant);
 
 	std::cout << "Running Dijkstra on small graph\n";
-	std::vector<int> path = SearchAlgorithms::Dijkstra(homeGraph,18,11);
+	path = SearchAlgorithms::Dijkstra(homeGraph,18,11);
 	SearchAlgorithms::PrintPath(path);
 
 	std::cout << "Running Dijkstra on large graph\n";
@@ -79,6 +82,8 @@ void ofApp::setup(){
 	std::cout << "Running A* on large graph with random estimate\n";
 	path = SearchAlgorithms::AStar(romeGraph, 180, 2568,romeRandom);
 	SearchAlgorithms::PrintPath(path);
+
+	path.clear();
 }
 
 //--------------------------------------------------------------
@@ -86,6 +91,14 @@ void ofApp::update(){
 
 	//Update the king and his subjects kinematics
 	boidKing->Update(ofGetLastFrameTime());
+
+	//pathfinds
+	if (!path.empty())
+	{
+		MovementAlgorithms::Steering result = pathfinding.ArrivePath(boidKing->GetKinematic(), path, grid,10.0f, 10.0f, 10.0f, 0.0698132f, 150.0f, 0.0698132f*100.0f, .25f, PI);
+		boidKing->GetKinematic()->SetAngular(result.m_angular);
+		boidKing->GetKinematic()->SetLinear(result.m_linear);
+	}
 
 	//Check boundaries
 	CheckBoundaries();
@@ -203,6 +216,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 
+		path.clear();
 		boidKing->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
 		boidKing->GetKinematic()->SetRotation(0.0f);
 		boidKing->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
@@ -212,9 +226,14 @@ void ofApp::mousePressed(int x, int y, int button){
 
 		std::cout << "Running A* on grid graph with euclidan distance\n";
 		int goal = grid.GetContainingNode(clickTarget->GetPosition());
-		gridEuclidian = SearchAlgorithms::Heuristic(GetEcluidianHeuristic(grid, gridGraph, goal));
-		std::vector<int>path = SearchAlgorithms::AStar(gridGraph, grid.GetContainingNode(boidKing->GetKinematic()->GetPosition()),goal, gridEuclidian);
-		SearchAlgorithms::PrintPath(path);
+		int current = grid.GetContainingNode(boidKing->GetKinematic()->GetPosition());
+
+		if (!gridGraph.GetOutgoingEdges(goal).empty() && goal != current)
+		{
+			gridEuclidian = SearchAlgorithms::Heuristic(GetEcluidianHeuristic(grid, gridGraph, goal));
+			path = SearchAlgorithms::AStar(gridGraph, grid.GetContainingNode(boidKing->GetKinematic()->GetPosition()), goal, gridEuclidian);
+			SearchAlgorithms::PrintPath(path);
+		}
 }
 
 //--------------------------------------------------------------
