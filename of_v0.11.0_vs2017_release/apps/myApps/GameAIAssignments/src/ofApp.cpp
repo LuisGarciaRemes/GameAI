@@ -95,7 +95,7 @@ void ofApp::update(){
 	//pathfinds
 	if (!path.empty())
 	{
-		MovementAlgorithms::Steering result = pathfinding.ArrivePath(boidKing->GetKinematic(), path, grid,15.0f, 10.0f, 10.0f, 0.0698132f, 150.0f, 0.0698132f*50.0f, .5f, PI);
+		MovementAlgorithms::Steering result = pathfinding.ArrivePath(boidKing->GetKinematic(), path, grid,11.0f, 15.0f, 10.0f, 0.0698132f, 150.0f, 0.0698132f*50.0f, .75f, PI);
 		boidKing->GetKinematic()->SetAngular(result.m_angular);
 		boidKing->GetKinematic()->SetLinear(result.m_linear);
 	}
@@ -122,55 +122,57 @@ void ofApp::draw(){
 		}
 	}
 
+	float radius = 26;
+
 	//Draws Obstacles
 	ofSetColor(0, 0, 0);
-	ofDrawCircle(5 * 64 + 32, 3 * 64 + 32, 32);
-	ofDrawCircle(8 * 64 + 32, 8 * 64 + 32, 32);
-	ofDrawCircle(8 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(12 * 64 + 32, 3 * 64 + 32, 32);
-	ofDrawCircle(15 * 64 + 32, 11 * 64 + 32, 32);
-	ofDrawCircle(1 * 64 + 32, 0 * 64 + 32, 32);
-	ofDrawCircle(12 * 64 + 32, 0 * 64 + 32, 32);
-	ofDrawCircle(1 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(1 * 64 + 32, 2 * 64 + 32, 32);
-	ofDrawCircle(5 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(6 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(7 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(8 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(10 * 64 + 32, 1 * 64 + 32, 32);
-	ofDrawCircle(14 * 64 + 32, 2 * 64 + 32, 32);
-	ofDrawCircle(8 * 64 + 32, 3 * 64 + 32, 32);
-	ofDrawCircle(9 * 64 + 32, 3 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 4 * 64 + 32, 32);
-	ofDrawCircle(9 * 64 + 32, 4 * 64 + 32, 32);
-	ofDrawCircle(1 * 64 + 32, 5 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 5 * 64 + 32, 32);
-	ofDrawCircle(4 * 64 + 32, 5 * 64 + 32, 32);
-	ofDrawCircle(6 * 64 + 32, 5 * 64 + 32, 32);
-	ofDrawCircle(10 * 64 + 32, 6 * 64 + 32, 32);
-	ofDrawCircle(12 * 64 + 32, 6 * 64 + 32, 32);
-	ofDrawCircle(13 * 64 + 32, 6 * 64 + 32, 32);
-	ofDrawCircle(0 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(4 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(12 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(13 * 64 + 32, 7 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 8 * 64 + 32, 32);
-	ofDrawCircle(4 * 64 + 32, 8 * 64 + 32, 32);
-	ofDrawCircle(6 * 64 + 32, 8 * 64 + 32, 32);
-	ofDrawCircle(10 * 64 + 32, 8 * 64 + 32, 32);
-	ofDrawCircle(2 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(3 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(4 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(6 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(10 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(12 * 64 + 32, 9 * 64 + 32, 32);
-	ofDrawCircle(6 * 64 + 32, 10 * 64 + 32, 32);
-	ofDrawCircle(7 * 64 + 32, 10 * 64 + 32, 32);
-	ofDrawCircle(9 * 64 + 32, 10 * 64 + 32, 32);
-	ofDrawCircle(10 * 64 + 32, 10 * 64 + 32, 32);
-	ofDrawCircle(0 * 64 + 32, 11 * 64 + 32, 32);
+	ofDrawCircle(5 * 64 + 32, 3 * 64 + 32, radius);
+	ofDrawCircle(8 * 64 + 32, 8 * 64 + 32, radius);
+	ofDrawCircle(8 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(12 * 64 + 32, 3 * 64 + 32, radius);
+	ofDrawCircle(15 * 64 + 32, 11 * 64 + 32, radius);
+	ofDrawCircle(1 * 64 + 32, 0 * 64 + 32, radius);
+	ofDrawCircle(12 * 64 + 32, 0 * 64 + 32, radius);
+	ofDrawCircle(1 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(1 * 64 + 32, 2 * 64 + 32, radius);
+	ofDrawCircle(5 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(6 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(7 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(8 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(10 * 64 + 32, 1 * 64 + 32, radius);
+	ofDrawCircle(14 * 64 + 32, 2 * 64 + 32, radius);
+	ofDrawCircle(8 * 64 + 32, 3 * 64 + 32, radius);
+	ofDrawCircle(9 * 64 + 32, 3 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 4 * 64 + 32, radius);
+	ofDrawCircle(9 * 64 + 32, 4 * 64 + 32, radius);
+	ofDrawCircle(1 * 64 + 32, 5 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 5 * 64 + 32, radius);
+	ofDrawCircle(4 * 64 + 32, 5 * 64 + 32, radius);
+	ofDrawCircle(6 * 64 + 32, 5 * 64 + 32, radius);
+	ofDrawCircle(10 * 64 + 32, 6 * 64 + 32, radius);
+	ofDrawCircle(12 * 64 + 32, 6 * 64 + 32, radius);
+	ofDrawCircle(13 * 64 + 32, 6 * 64 + 32, radius);
+	ofDrawCircle(0 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(4 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(12 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(13 * 64 + 32, 7 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 8 * 64 + 32, radius);
+	ofDrawCircle(4 * 64 + 32, 8 * 64 + 32, radius);
+	ofDrawCircle(6 * 64 + 32, 8 * 64 + 32, radius);
+	ofDrawCircle(10 * 64 + 32, 8 * 64 + 32, radius);
+	ofDrawCircle(2 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(3 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(4 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(6 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(10 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(12 * 64 + 32, 9 * 64 + 32, radius);
+	ofDrawCircle(6 * 64 + 32, 10 * 64 + 32, radius);
+	ofDrawCircle(7 * 64 + 32, 10 * 64 + 32, radius);
+	ofDrawCircle(9 * 64 + 32, 10 * 64 + 32, radius);
+	ofDrawCircle(10 * 64 + 32, 10 * 64 + 32, radius);
+	ofDrawCircle(0 * 64 + 32, 11 * 64 + 32, radius);
 
 	//Draws BreadCrumbs
 	for (Boid::Breadcrumb crumb : boidKing->GetCrumbs())

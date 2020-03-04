@@ -2,7 +2,7 @@
 
 Pathfinding::Pathfinding()
 {
-	m_pathIndex = 1;
+	m_pathIndex = 0;
 }
 
 Pathfinding::~Pathfinding()
@@ -11,7 +11,7 @@ Pathfinding::~Pathfinding()
 
 void Pathfinding::ResetPathIndex()
 {
-	m_pathIndex = 1;
+	m_pathIndex = 0;
 }
 
 MovementAlgorithms::Steering Pathfinding::ArrivePath(Kinematic * i_char, std::vector<int> i_path, SearchAlgorithms::Grid i_grid, float i_distanceFromNode, float i_maxLinear, float i_targetRadiusLinear, float i_targetRadiusAngular, float i_slowRadiusLinear, float i_slowRadiusAngular, float i_maxAngular, float i_maxRot)
