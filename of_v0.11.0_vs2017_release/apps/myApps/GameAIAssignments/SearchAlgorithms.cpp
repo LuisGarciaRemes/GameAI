@@ -1,8 +1,11 @@
 #include "SearchAlgorithms.h"
 #include <iostream>
+#include "ofUtils.h"
 
 std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, int i_goal)
 {
+	int numNodes = 0;
+	float timeStart = ofGetCurrentTime().getAsMilliseconds();
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
 	std::vector<DirectedWeightedEdge> currEdges;
@@ -18,7 +21,8 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, 
 
 	//Search through while open list is not empty or until goal is found
 	while (!openList.Empty())
-	{
+	{ 
+		numNodes++;
 		currRecord = openList.GetNext();
 
 		if (currRecord.m_node == i_goal)
@@ -88,13 +92,19 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, 
 
 	path.insert(path.begin(), i_start);
 
+	std::cout << "visited " << numNodes << " nodes\n";
+	float timeEnd = ofGetCurrentTime().getAsMilliseconds();
+
+	std::cout << "Path took " << timeEnd - timeStart << " milliseconds to find\n";
 	//return path
 	return path;
 }
 
 std::vector<int> SearchAlgorithms::AStar(DirectedGraph i_graph, int i_start, int i_goal, Heuristic i_heuristic)
 {
-
+	int numNodes = 0;
+	float timeToFindPath = 0.0f;
+	float timeStart = ofGetCurrentTime().getAsMilliseconds();
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
 	std::vector<DirectedWeightedEdge> currEdges;
@@ -111,6 +121,7 @@ std::vector<int> SearchAlgorithms::AStar(DirectedGraph i_graph, int i_start, int
 	//Search through while open list is not empty or until goal is found
 	while (!openList.Empty())
 	{
+		numNodes++;
 		currRecord = openList.GetNext();
 
 		if (currRecord.m_node == i_goal)
@@ -179,6 +190,11 @@ std::vector<int> SearchAlgorithms::AStar(DirectedGraph i_graph, int i_start, int
 	}
 
 	path.insert(path.begin(), i_start);
+	std::cout << "visited " << numNodes << " nodes\n";
+
+	float timeEnd = ofGetCurrentTime().getAsMilliseconds();
+
+	std::cout << "Path took " << timeEnd - timeStart << " milliseconds to find\n";
 
 	//return path
 	return path;
