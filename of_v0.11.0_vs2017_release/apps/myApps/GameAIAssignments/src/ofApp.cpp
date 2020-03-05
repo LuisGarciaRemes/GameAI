@@ -219,6 +219,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
 
 		path.clear();
+		pathfinding.ResetPathIndex();
 		boidKing->GetKinematic()->SetVelocity(ofVec2f(0.0f, 0.0f));
 		boidKing->GetKinematic()->SetRotation(0.0f);
 		boidKing->GetKinematic()->SetLinear(ofVec2f(0.0f, 0.0f));
@@ -232,7 +233,6 @@ void ofApp::mousePressed(int x, int y, int button){
 
 		if (!gridGraph.GetOutgoingEdges(goal).empty() && goal != current)
 		{
-			pathfinding.ResetPathIndex();
 			gridEuclidian = SearchAlgorithms::Heuristic(GetEcluidianHeuristic(grid, gridGraph, goal));
 			path = SearchAlgorithms::AStar(gridGraph, grid.GetContainingNode(boidKing->GetKinematic()->GetPosition()), goal, gridEuclidian);
 			SearchAlgorithms::PrintPath(path);

@@ -94,6 +94,7 @@ std::vector<int> SearchAlgorithms::Dijkstra(DirectedGraph i_graph, int i_start, 
 
 std::vector<int> SearchAlgorithms::AStar(DirectedGraph i_graph, int i_start, int i_goal, Heuristic i_heuristic)
 {
+
 	//Initialize the record for the start node.
 	NodeRecord currRecord;
 	std::vector<DirectedWeightedEdge> currEdges;
